@@ -20,7 +20,10 @@ Use this file when adding or updating tests.
 - `npm run test`: build plus the full test suite
 - `npm run test:integration`: build plus integration-only coverage, forced to
   run one integration file at a time because the compose-backed suite shares a
-  single Vaultwarden/`bw` runtime
+  single Vaultwarden/`bw` runtime. Each file has a six-minute timeout; the
+  three-policy item-redaction matrix has a five-minute timeout to include real
+  CLI startup, authenticated round trips and fixture cleanup. Other tests keep
+  their individual timeouts.
 - `make test`: compose-backed integration path
 
 ## Quick Local Smoke

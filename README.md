@@ -251,7 +251,7 @@ The server resolves `bw` in this order:
 2. bundled `@bitwarden/cli` dependency
 3. system `bw` from `PATH`
 
-The bundled `@bitwarden/cli` version is currently `2026.8.0`. This project keeps
+The bundled `@bitwarden/cli` version is currently `2026.10.0`. This project keeps
 that version vetted instead of blindly tracking every upstream release, because
 auth and unlock behavior can change in ways that break automation.
 
@@ -259,7 +259,7 @@ If `bw` is missing, install the CLI explicitly or point `BW_BIN` to a known
 binary:
 
 ```bash
-npm install -g @bitwarden/cli@2026.8.0
+npm install -g @bitwarden/cli@2026.10.0
 BW_BIN=/absolute/path/to/bw npx -y @icoretech/warden-mcp@latest --stdio
 ```
 

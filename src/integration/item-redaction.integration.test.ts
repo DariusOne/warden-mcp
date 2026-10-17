@@ -26,7 +26,9 @@ function structuredContent(result: Record<string, unknown>): Item {
 }
 
 test('mcp stdio: native SSH keys and notes respect reveal and NOREVEAL against Vaultwarden', {
-  timeout: 180_000,
+  // Three policies exercise real CLI processes sequentially, including setup
+  // and cleanup. Keep this below the integration runner's six-minute budget.
+  timeout: 300_000,
 }, async (t) => {
   if (!process.env.BW_HOST) {
     t.skip('BW_HOST not set (requires the compose-backed vault)');
