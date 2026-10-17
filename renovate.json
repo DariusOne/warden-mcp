@@ -1,6 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "ignorePresets": [":semanticPrefixFixDepsChoreOthers"],
+  "semanticCommits": "enabled",
+  "semanticCommitType": "deps",
+  "semanticCommitScope": "",
   "enabledManagers": ["custom.regex", "docker-compose", "github-actions", "npm"],
   "dependencyDashboard": true,
   "labels": ["dependencies"],
@@ -87,9 +91,6 @@
       "description": "Make Vaultwarden server image updates releasable",
       "matchManagers": ["docker-compose"],
       "matchPackageNames": ["vaultwarden/server"],
-      "semanticCommits": "enabled",
-      "semanticCommitType": "fix",
-      "commitMessagePrefix": "fix(deps):",
       "commitMessageAction": "update",
       "commitMessageTopic": "vaultwarden/server docker tag",
       "commitMessageExtra": "to {{prettyNewVersion}}"
