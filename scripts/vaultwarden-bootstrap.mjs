@@ -265,7 +265,8 @@ async function main() {
       if (!loggedIn) {
         const bodyText = await page
           .locator('body')
-          .innerText()
+          .textContent()
+          .then((text) => text ?? '')
           .catch(() => '');
         throw new Error(
           `Login did not complete within ${timeoutMs}ms. Still at ${page.url()}.\n` +
@@ -451,18 +452,26 @@ async function main() {
       page.waitForTimeout(timeoutMs),
     ]);
 
-    const bodyText = await page
-      .locator('body')
-      .innerText()
-      .catch(() => '');
-    const clientIdMatch = bodyText.match(/client_id:\s*([^\s]+)/i);
-    const clientSecretMatch = bodyText.match(/client_secret:\s*([^\s]+)/i);
+    const clientId = (
+      await page
+        .locator('p')
+        .filter({ has: page.getByText('client_id:', { exact: true }) })
+        .locator('code')
+        .textContent()
+    )?.trim();
+    const clientSecret = (
+      await page
+        .locator('p')
+        .filter({ has: page.getByText('client_secret:', { exact: true }) })
+        .locator('code')
+        .textContent()
+    )?.trim();
 
-    if (!clientIdMatch || !clientSecretMatch) {
+    if (!clientId || !clientSecret) {
       throw new Error('Could not extract API key client credentials');
     }
 
-    await writeApiKeyEnv(clientIdMatch[1], clientSecretMatch[1]);
+    await writeApiKeyEnv(clientId, clientSecret);
   }
 
   try {
@@ -523,7 +532,8 @@ async function main() {
 
     const step1BodyText = await page
       .locator('body')
-      .innerText()
+      .textContent()
+      .then((text) => text ?? '')
       .catch(() => '');
     if (/#\/login\b/.test(page.url())) {
       console.log('[bootstrap] existing-account login redirect, continuing');
@@ -578,7 +588,8 @@ async function main() {
       // If there's a visible error that implies already registered, that's fine.
       const bodyText = await page
         .locator('body')
-        .innerText()
+        .textContent()
+        .then((text) => text ?? '')
         .catch(() => '');
       if (/already (in use|exists)|email.*taken/i.test(bodyText)) {
         console.log('[bootstrap] user already exists, continuing');

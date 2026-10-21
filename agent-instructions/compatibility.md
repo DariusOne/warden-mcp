@@ -15,6 +15,7 @@ automation.
 
 ## Upgrade Rules
 
+- Keep Biome exactly pinned and update its schema with the package; release-please owns generated `CHANGELOG.md` formatting.
 - Treat `package.json` and the bundled CLI version as a compatibility decision,
   not a routine dependency bump
 - A CLI bump must survive the compose-backed Vaultwarden suite before merge

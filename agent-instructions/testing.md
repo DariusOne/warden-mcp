@@ -110,13 +110,11 @@ OpenCode itself, but points the MCP child at a configurable
 state.
 
 Required env vars:
-
 - `BW_HOST`
 - `BW_PASSWORD`
 - either `BW_CLIENTID` + `BW_CLIENTSECRET`, or `BW_USER` / `BW_USERNAME`
 
 Recommended extra env vars:
-
 - `ISOLATED_KEYCHAIN_BW_HOME_ROOT` — defaults to `~/bw-profiles`
 - `ISOLATED_OPENCODE_MCP_TIMEOUT_MS` — defaults to `10000`
 - `ISOLATED_WARDEN_LOOKUP_TERM` — defaults to `app.example.test`
@@ -132,7 +130,6 @@ node scripts/opencode-isolated-warden-smoke.mjs
 ```
 
 The script:
-
 1. starts an isolated `opencode serve`
 2. configures only one local MCP server (`warden`)
 3. calls `keychain_status`

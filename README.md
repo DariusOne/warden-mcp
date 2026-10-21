@@ -24,7 +24,6 @@ Use stdio mode when a local MCP host launches the server directly. It is the
 simplest and most portable setup for desktop agents.
 
 Prerequisites:
-
 - Node.js 22.x
 - npm 10.x
 - a Vaultwarden or Bitwarden account
@@ -112,11 +111,11 @@ BW_PASSWORD = "your-master-password"
 
 Common locations:
 
-| Host | Config file |
-| --- | --- |
-| Cursor | `~/.cursor/mcp.json` or `.cursor/mcp.json` |
+| Host           | Config file                                                       |
+| -------------- | ----------------------------------------------------------------- |
+| Cursor         | `~/.cursor/mcp.json` or `.cursor/mcp.json`                        |
 | Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| Codex | `~/.codex/config.toml` |
+| Codex          | `~/.codex/config.toml`                                            |
 
 ## Why Use It
 
@@ -151,11 +150,11 @@ when the process starts.
 
 The HTTP server exposes:
 
-| Endpoint | Purpose |
-| --- | --- |
-| `GET /healthz` | liveness check; does not validate vault credentials |
-| `GET /metricsz` | session and runtime guardrail metrics |
-| `/sse?v=2` | MCP Streamable HTTP endpoint |
+| Endpoint        | Purpose                                             |
+| --------------- | --------------------------------------------------- |
+| `GET /healthz`  | liveness check; does not validate vault credentials |
+| `GET /metricsz` | session and runtime guardrail metrics               |
+| `/sse?v=2`      | MCP Streamable HTTP endpoint                        |
 
 ## Run As A Shared HTTP Service
 
@@ -177,14 +176,14 @@ curl -fsS http://localhost:3005/healthz
 MCP tool calls must include these headers unless env fallback is explicitly
 enabled:
 
-| Header | Meaning |
-| --- | --- |
-| `X-BW-Host` | HTTPS origin only, for example `https://vaultwarden.example.com` |
-| `X-BW-Password` | master password used to unlock the vault |
-| `X-BW-ClientId` | Bitwarden API key client id |
-| `X-BW-ClientSecret` | Bitwarden API key client secret |
-| `X-BW-User` or `X-BW-Username` | username/email alternative to API key login |
-| `X-BW-Unlock-Interval` | optional unlock interval in seconds; default `300` |
+| Header                         | Meaning                                                          |
+| ------------------------------ | ---------------------------------------------------------------- |
+| `X-BW-Host`                    | HTTPS origin only, for example `https://vaultwarden.example.com` |
+| `X-BW-Password`                | master password used to unlock the vault                         |
+| `X-BW-ClientId`                | Bitwarden API key client id                                      |
+| `X-BW-ClientSecret`            | Bitwarden API key client secret                                  |
+| `X-BW-User` or `X-BW-Username` | username/email alternative to API key login                      |
+| `X-BW-Unlock-Interval`         | optional unlock interval in seconds; default `300`               |
 
 Example HTTP MCP config for hosts that support custom headers:
 
@@ -246,7 +245,6 @@ default. If you use a bind mount, make it writable by uid/gid `1000`.
 The Docker image includes the supported Node runtime.
 
 The server resolves `bw` in this order:
-
 1. `BW_BIN`, when set
 2. bundled `@bitwarden/cli` dependency
 3. system `bw` from `PATH`
@@ -267,7 +265,6 @@ BW_BIN=/absolute/path/to/bw npx -y @icoretech/warden-mcp@latest --stdio
 
 There is no built-in authentication layer in v1. Protect the transport before
 you expose it.
-
 - **Bind locally by default** - use `WARDEN_MCP_HOST=127.0.0.1`, Docker
   `-p 127.0.0.1:3005:3005`, a firewall, VPN, or an authenticated reverse proxy
 - **Use TLS for HTTP mode** - `X-BW-*` headers carry vault credentials
@@ -294,25 +291,25 @@ Returning notes or private keys requires `reveal: true`; `NOREVEAL` and
 
 ## Configuration
 
-| Variable | Default | Purpose |
-| --- | --- | --- |
-| `PORT` | `3005` | HTTP listen port |
-| `WARDEN_MCP_HOST` | all interfaces | HTTP bind host |
-| `WARDEN_MCP_STDIO` | `false` | force stdio mode without `--stdio` |
-| `MCP_APP_NAME` | `keychain-mcp` | advertised MCP server name |
-| `TOOL_PREFIX` | `keychain` | public tool namespace |
-| `TOOL_SEPARATOR` | `_` | public tool separator; set `.` for legacy clients |
-| `KEYCHAIN_BW_HOME_ROOT` | `${HOME}/bw-profiles` | root for per-profile `bw` state |
-| `KEYCHAIN_ALLOW_ENV_FALLBACK` | `false` | allow HTTP calls to inherit server `BW_*` env |
-| `KEYCHAIN_SYNC_ON_WRITE` | `true` | run `bw sync` before write operations |
-| `READONLY` / `KEYCHAIN_READONLY` | `false` | hide and reject mutating tools |
-| `NOREVEAL` / `KEYCHAIN_NOREVEAL` | `false` | force `reveal: false` server-side |
-| `KEYCHAIN_TEXT_COMPAT_MODE` | unset | set `structured_json` for text-only clients |
-| `KEYCHAIN_SESSION_MAX_COUNT` | `32` | max tracked HTTP sessions |
-| `KEYCHAIN_SESSION_TTL_MS` | `900000` | inactive session TTL |
-| `KEYCHAIN_SESSION_SWEEP_INTERVAL_MS` | `60000` | session cleanup interval |
-| `KEYCHAIN_MAX_HEAP_USED_MB` | `1536` | memory fuse; set `0` to disable |
-| `KEYCHAIN_METRICS_LOG_INTERVAL_MS` | `0` | periodic metrics logging; `0` disables |
+| Variable                             | Default               | Purpose                                           |
+| ------------------------------------ | --------------------- | ------------------------------------------------- |
+| `PORT`                               | `3005`                | HTTP listen port                                  |
+| `WARDEN_MCP_HOST`                    | all interfaces        | HTTP bind host                                    |
+| `WARDEN_MCP_STDIO`                   | `false`               | force stdio mode without `--stdio`                |
+| `MCP_APP_NAME`                       | `keychain-mcp`        | advertised MCP server name                        |
+| `TOOL_PREFIX`                        | `keychain`            | public tool namespace                             |
+| `TOOL_SEPARATOR`                     | `_`                   | public tool separator; set `.` for legacy clients |
+| `KEYCHAIN_BW_HOME_ROOT`              | `${HOME}/bw-profiles` | root for per-profile `bw` state                   |
+| `KEYCHAIN_ALLOW_ENV_FALLBACK`        | `false`               | allow HTTP calls to inherit server `BW_*` env     |
+| `KEYCHAIN_SYNC_ON_WRITE`             | `true`                | run `bw sync` before write operations             |
+| `READONLY` / `KEYCHAIN_READONLY`     | `false`               | hide and reject mutating tools                    |
+| `NOREVEAL` / `KEYCHAIN_NOREVEAL`     | `false`               | force `reveal: false` server-side                 |
+| `KEYCHAIN_TEXT_COMPAT_MODE`          | unset                 | set `structured_json` for text-only clients       |
+| `KEYCHAIN_SESSION_MAX_COUNT`         | `32`                  | max tracked HTTP sessions                         |
+| `KEYCHAIN_SESSION_TTL_MS`            | `900000`              | inactive session TTL                              |
+| `KEYCHAIN_SESSION_SWEEP_INTERVAL_MS` | `60000`               | session cleanup interval                          |
+| `KEYCHAIN_MAX_HEAP_USED_MB`          | `1536`                | memory fuse; set `0` to disable                   |
+| `KEYCHAIN_METRICS_LOG_INTERVAL_MS`   | `0`                   | periodic metrics logging; `0` disables            |
 
 `KEYCHAIN_TEXT_COMPAT_MODE=structured_json` mirrors supported
 `structuredContent` into plain text. That helps MCP clients that only pass
@@ -325,7 +322,6 @@ Tool names default to `keychain_*`. Change the prefix with `TOOL_PREFIX` and the
 separator with `TOOL_SEPARATOR`.
 
 Start with these:
-
 - `keychain_status` - inspect raw `bw` status
 - `keychain_sync` - pull latest vault data with `bw sync`
 - `keychain_search_items` - find items by name, URI, username, folder,
@@ -338,18 +334,17 @@ Start with these:
 
 Full tool groups:
 
-| Group | Tools |
-| --- | --- |
-| Vault/session | `keychain_status`, `keychain_sync`, `keychain_sdk_version`, `keychain_encode`, `keychain_generate`, `keychain_generate_username` |
-| Items | `keychain_search_items`, `keychain_get_item`, `keychain_update_item`, `keychain_create_login`, `keychain_create_logins`, `keychain_set_login_uris`, `keychain_create_note`, `keychain_create_card`, `keychain_create_identity`, `keychain_create_ssh_key`, `keychain_delete_item`, `keychain_delete_items`, `keychain_restore_item` |
-| Folders | `keychain_list_folders`, `keychain_create_folder`, `keychain_edit_folder`, `keychain_delete_folder` |
-| Organizations and collections | `keychain_list_organizations`, `keychain_list_collections`, `keychain_list_org_collections`, `keychain_create_org_collection`, `keychain_edit_org_collection`, `keychain_delete_org_collection`, `keychain_move_item_to_organization` |
-| Attachments | `keychain_create_attachment`, `keychain_delete_attachment`, `keychain_get_attachment` |
-| Sends | `keychain_send_list`, `keychain_send_template`, `keychain_send_get`, `keychain_send_create`, `keychain_send_create_encoded`, `keychain_send_edit`, `keychain_send_remove_password`, `keychain_send_delete`, `keychain_receive` |
-| Direct `bw get` helpers | `keychain_get_username`, `keychain_get_password`, `keychain_get_totp`, `keychain_get_notes`, `keychain_get_uri`, `keychain_get_exposed`, `keychain_get_folder`, `keychain_get_collection`, `keychain_get_organization`, `keychain_get_org_collection`, `keychain_get_password_history` |
+| Group                         | Tools                                                                                                                                                                                                                                                                                                                               |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vault/session                 | `keychain_status`, `keychain_sync`, `keychain_sdk_version`, `keychain_encode`, `keychain_generate`, `keychain_generate_username`                                                                                                                                                                                                    |
+| Items                         | `keychain_search_items`, `keychain_get_item`, `keychain_update_item`, `keychain_create_login`, `keychain_create_logins`, `keychain_set_login_uris`, `keychain_create_note`, `keychain_create_card`, `keychain_create_identity`, `keychain_create_ssh_key`, `keychain_delete_item`, `keychain_delete_items`, `keychain_restore_item` |
+| Folders                       | `keychain_list_folders`, `keychain_create_folder`, `keychain_edit_folder`, `keychain_delete_folder`                                                                                                                                                                                                                                 |
+| Organizations and collections | `keychain_list_organizations`, `keychain_list_collections`, `keychain_list_org_collections`, `keychain_create_org_collection`, `keychain_edit_org_collection`, `keychain_delete_org_collection`, `keychain_move_item_to_organization`                                                                                               |
+| Attachments                   | `keychain_create_attachment`, `keychain_delete_attachment`, `keychain_get_attachment`                                                                                                                                                                                                                                               |
+| Sends                         | `keychain_send_list`, `keychain_send_template`, `keychain_send_get`, `keychain_send_create`, `keychain_send_create_encoded`, `keychain_send_edit`, `keychain_send_remove_password`, `keychain_send_delete`, `keychain_receive`                                                                                                      |
+| Direct `bw get` helpers       | `keychain_get_username`, `keychain_get_password`, `keychain_get_totp`, `keychain_get_notes`, `keychain_get_uri`, `keychain_get_exposed`, `keychain_get_folder`, `keychain_get_collection`, `keychain_get_organization`, `keychain_get_org_collection`, `keychain_get_password_history`                                              |
 
 Notes:
-
 - `keychain_create_logins` creates several independent login items in one call
   and reports per-item failures without aborting the whole batch
 - `keychain_set_login_uris` replaces or merges a login item's URI list without
@@ -379,18 +374,18 @@ account, and runs the MCP server in the foreground.
 
 Useful commands:
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | watch-mode server from source |
-| `npm run build` | compile TypeScript to `dist/` |
-| `npm run start` | run the compiled server |
-| `npm run lint` | Biome autofix plus `tsc --noEmit` |
-| `npm run test` | build, then run all compiled tests |
-| `npm run test:integration` | build, then run compose-backed integration tests |
-| `npm run test:coverage` | build, then run Node test coverage |
-| `make test` | run the compose-backed Vaultwarden integration path |
-| `make test-org` | run the organization-focused compose stack |
-| `make down` | stop the local compose stack |
+| Command                    | Purpose                                             |
+| -------------------------- | --------------------------------------------------- |
+| `npm run dev`              | watch-mode server from source                       |
+| `npm run build`            | compile TypeScript to `dist/`                       |
+| `npm run start`            | run the compiled server                             |
+| `npm run lint`             | Biome autofix plus `tsc --noEmit`                   |
+| `npm run test`             | build, then run all compiled tests                  |
+| `npm run test:integration` | build, then run compose-backed integration tests    |
+| `npm run test:coverage`    | build, then run Node test coverage                  |
+| `make test`                | run the compose-backed Vaultwarden integration path |
+| `make test-org`            | run the organization-focused compose stack          |
+| `make down`                | stop the local compose stack                        |
 
 For a quick live MCP smoke against local Vaultwarden, see
 [agent-instructions/testing.md](agent-instructions/testing.md).

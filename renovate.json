@@ -65,6 +65,7 @@
       "description": "Keep Biome package and schema updates together",
       "matchManagers": ["npm", "custom.regex"],
       "matchPackageNames": ["@biomejs/biome"],
+      "rangeStrategy": "pin",
       "groupName": "biome tooling",
       "groupSlug": "biome-tooling"
     },
@@ -119,6 +120,8 @@
       "matchManagers": ["npm", "custom.regex"],
       "matchPackageNames": ["node"],
       "allowedVersions": ">=22 <23",
+      "groupName": "node runtime",
+      "groupSlug": "node-runtime",
       "automerge": false
     },
     {
@@ -126,6 +129,8 @@
       "matchManagers": ["github-actions"],
       "matchPackageNames": ["actions/node-versions"],
       "allowedVersions": ">=22 <23",
+      "groupName": "node runtime",
+      "groupSlug": "node-runtime",
       "automerge": false
     },
     {

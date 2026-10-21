@@ -2,646 +2,570 @@
 
 ## [0.2.54](https://github.com/icoretech/warden-mcp/compare/v0.2.53...v0.2.54) (2026-10-17)
 
-
 ### Dependencies
 
-* update Bitwarden CLI to 2026.10.0 ([a2d6401](https://github.com/icoretech/warden-mcp/commit/a2d64014bcb64eef53722c6518a9079fda115016))
+- update Bitwarden CLI to 2026.10.0 ([a2d6401](https://github.com/icoretech/warden-mcp/commit/a2d64014bcb64eef53722c6518a9079fda115016))
 
 ## [0.2.53](https://github.com/icoretech/warden-mcp/compare/v0.2.52...v0.2.53) (2026-10-13)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.6.7 ([#220](https://github.com/icoretech/warden-mcp/issues/220)) ([4365c3e](https://github.com/icoretech/warden-mcp/commit/4365c3e25f5adb695ad2f59fc874fd2eadafe824))
+- **deps:** update dependency zod to ^4.6.7 ([#220](https://github.com/icoretech/warden-mcp/issues/220)) ([4365c3e](https://github.com/icoretech/warden-mcp/commit/4365c3e25f5adb695ad2f59fc874fd2eadafe824))
 
 ## [0.2.52](https://github.com/icoretech/warden-mcp/compare/v0.2.51...v0.2.52) (2026-10-12)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.6.6 ([#218](https://github.com/icoretech/warden-mcp/issues/218)) ([35da897](https://github.com/icoretech/warden-mcp/commit/35da897f81c38dba8585ceff6a06433126160432))
+- **deps:** update dependency zod to ^4.6.6 ([#218](https://github.com/icoretech/warden-mcp/issues/218)) ([35da897](https://github.com/icoretech/warden-mcp/commit/35da897f81c38dba8585ceff6a06433126160432))
 
 ## [0.2.51](https://github.com/icoretech/warden-mcp/compare/v0.2.50...v0.2.51) (2026-10-09)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency express to ^5.3.0 ([#216](https://github.com/icoretech/warden-mcp/issues/216)) ([f64f3cb](https://github.com/icoretech/warden-mcp/commit/f64f3cbcfb3563a17450eb6958572f90a49078e5))
+- **deps:** update dependency express to ^5.3.0 ([#216](https://github.com/icoretech/warden-mcp/issues/216)) ([f64f3cb](https://github.com/icoretech/warden-mcp/commit/f64f3cbcfb3563a17450eb6958572f90a49078e5))
 
 ## [0.2.50](https://github.com/icoretech/warden-mcp/compare/v0.2.49...v0.2.50) (2026-10-06)
 
-
 ### Bug Fixes
 
-* **deps:** update vaultwarden/server docker tag to v1.37.4 ([#213](https://github.com/icoretech/warden-mcp/issues/213)) ([3e3c606](https://github.com/icoretech/warden-mcp/commit/3e3c60675fef18270b2bc302bb74b9f3e49b481a))
+- **deps:** update vaultwarden/server docker tag to v1.37.4 ([#213](https://github.com/icoretech/warden-mcp/issues/213)) ([3e3c606](https://github.com/icoretech/warden-mcp/commit/3e3c60675fef18270b2bc302bb74b9f3e49b481a))
 
 ## [0.2.49](https://github.com/icoretech/warden-mcp/compare/v0.2.48...v0.2.49) (2026-10-05)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @modelcontextprotocol/sdk to ^1.32.1 ([#210](https://github.com/icoretech/warden-mcp/issues/210)) ([60e1d42](https://github.com/icoretech/warden-mcp/commit/60e1d422e1d4203714a0d9a710e1bb45525d6a4f))
+- **deps:** update dependency @modelcontextprotocol/sdk to ^1.32.1 ([#210](https://github.com/icoretech/warden-mcp/issues/210)) ([60e1d42](https://github.com/icoretech/warden-mcp/commit/60e1d422e1d4203714a0d9a710e1bb45525d6a4f))
 
 ## [0.2.48](https://github.com/icoretech/warden-mcp/compare/v0.2.47...v0.2.48) (2026-10-03)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @modelcontextprotocol/sdk to ^1.32.0 ([#207](https://github.com/icoretech/warden-mcp/issues/207)) ([b67071d](https://github.com/icoretech/warden-mcp/commit/b67071de6bdb5032321071dd1526ac6ebc25409f))
+- **deps:** update dependency @modelcontextprotocol/sdk to ^1.32.0 ([#207](https://github.com/icoretech/warden-mcp/issues/207)) ([b67071d](https://github.com/icoretech/warden-mcp/commit/b67071de6bdb5032321071dd1526ac6ebc25409f))
 
 ## [0.2.47](https://github.com/icoretech/warden-mcp/compare/v0.2.46...v0.2.47) (2026-10-02)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @bitwarden/cli to v2026.9.1 ([#204](https://github.com/icoretech/warden-mcp/issues/204)) ([6aeecf5](https://github.com/icoretech/warden-mcp/commit/6aeecf570eb5bfb04c256e0b54e17b09a93f730d))
+- **deps:** update dependency @bitwarden/cli to v2026.9.1 ([#204](https://github.com/icoretech/warden-mcp/issues/204)) ([6aeecf5](https://github.com/icoretech/warden-mcp/commit/6aeecf570eb5bfb04c256e0b54e17b09a93f730d))
 
 ## [0.2.46](https://github.com/icoretech/warden-mcp/compare/v0.2.45...v0.2.46) (2026-10-01)
 
-
 ### Bug Fixes
 
-* redact native SSH private keys and vault item notes ([736e9f9](https://github.com/icoretech/warden-mcp/commit/736e9f987104d86e8c964f6b7a4bea3639f27844))
+- redact native SSH private keys and vault item notes ([736e9f9](https://github.com/icoretech/warden-mcp/commit/736e9f987104d86e8c964f6b7a4bea3639f27844))
 
 ## [0.2.45](https://github.com/icoretech/warden-mcp/compare/v0.2.44...v0.2.45) (2026-09-29)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @modelcontextprotocol/sdk to ^1.31.0 ([#198](https://github.com/icoretech/warden-mcp/issues/198)) ([f067260](https://github.com/icoretech/warden-mcp/commit/f067260afd1bee5acbed57061c96ad4e07b6971d))
+- **deps:** update dependency @modelcontextprotocol/sdk to ^1.31.0 ([#198](https://github.com/icoretech/warden-mcp/issues/198)) ([f067260](https://github.com/icoretech/warden-mcp/commit/f067260afd1bee5acbed57061c96ad4e07b6971d))
 
 ## [0.2.44](https://github.com/icoretech/warden-mcp/compare/v0.2.43...v0.2.44) (2026-09-24)
 
-
 ### Bug Fixes
 
-* **bin:** convert CLI module paths to file URLs ([b1f188e](https://github.com/icoretech/warden-mcp/commit/b1f188ebd3be707de5e6dbff99feea58b1a1a037))
-* **deps:** update multer and align runtimes with Node 22 ([f9a4309](https://github.com/icoretech/warden-mcp/commit/f9a43091ecdae3b373707212bb7175c6034e0a9c))
+- **bin:** convert CLI module paths to file URLs ([b1f188e](https://github.com/icoretech/warden-mcp/commit/b1f188ebd3be707de5e6dbff99feea58b1a1a037))
+- **deps:** update multer and align runtimes with Node 22 ([f9a4309](https://github.com/icoretech/warden-mcp/commit/f9a43091ecdae3b373707212bb7175c6034e0a9c))
 
 ## [0.2.43](https://github.com/icoretech/warden-mcp/compare/v0.2.42...v0.2.43) (2026-09-24)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @modelcontextprotocol/sdk to ^1.30.1 ([fe8ca2a](https://github.com/icoretech/warden-mcp/commit/fe8ca2a1ea2d1cc887309e4c5a28803ad7921dfe))
+- **deps:** update dependency @modelcontextprotocol/sdk to ^1.30.1 ([fe8ca2a](https://github.com/icoretech/warden-mcp/commit/fe8ca2a1ea2d1cc887309e4c5a28803ad7921dfe))
 
 ## [0.2.42](https://github.com/icoretech/warden-mcp/compare/v0.2.41...v0.2.42) (2026-09-17)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @bitwarden/cli to v2026.9.0 ([#190](https://github.com/icoretech/warden-mcp/issues/190)) ([7531205](https://github.com/icoretech/warden-mcp/commit/7531205f0315d5d1d64f23af203edff0f2316e95))
+- **deps:** update dependency @bitwarden/cli to v2026.9.0 ([#190](https://github.com/icoretech/warden-mcp/issues/190)) ([7531205](https://github.com/icoretech/warden-mcp/commit/7531205f0315d5d1d64f23af203edff0f2316e95))
 
 ## [0.2.41](https://github.com/icoretech/warden-mcp/compare/v0.2.40...v0.2.41) (2026-09-14)
 
-
 ### Bug Fixes
 
-* **release:** publish Vaultwarden image upgrades ([16a83e7](https://github.com/icoretech/warden-mcp/commit/16a83e7359ef5ad980e31e3509ecc9828a9c6a5b))
+- **release:** publish Vaultwarden image upgrades ([16a83e7](https://github.com/icoretech/warden-mcp/commit/16a83e7359ef5ad980e31e3509ecc9828a9c6a5b))
 
 ## [0.2.40](https://github.com/icoretech/warden-mcp/compare/v0.2.39...v0.2.40) (2026-09-14)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.6.5 ([#183](https://github.com/icoretech/warden-mcp/issues/183)) ([e87fbcc](https://github.com/icoretech/warden-mcp/commit/e87fbcc7e20502117040dc73f69cac9c38fcb68c))
+- **deps:** update dependency zod to ^4.6.5 ([#183](https://github.com/icoretech/warden-mcp/issues/183)) ([e87fbcc](https://github.com/icoretech/warden-mcp/commit/e87fbcc7e20502117040dc73f69cac9c38fcb68c))
 
-* **deps:** update vaultwarden/server docker tag to v1.37.3 ([#182](https://github.com/icoretech/warden-mcp/issues/182)) ([66fe11d](https://github.com/icoretech/warden-mcp/commit/66fe11d943641128907169a7d8730c9867e44076))
+- **deps:** update vaultwarden/server docker tag to v1.37.3 ([#182](https://github.com/icoretech/warden-mcp/issues/182)) ([66fe11d](https://github.com/icoretech/warden-mcp/commit/66fe11d943641128907169a7d8730c9867e44076))
 
 ## [0.2.39](https://github.com/icoretech/warden-mcp/compare/v0.2.38...v0.2.39) (2026-09-13)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.6.4 ([#180](https://github.com/icoretech/warden-mcp/issues/180)) ([934f4f4](https://github.com/icoretech/warden-mcp/commit/934f4f4ee3cce68df19e6391dd2117f6e5fdccec))
+- **deps:** update dependency zod to ^4.6.4 ([#180](https://github.com/icoretech/warden-mcp/issues/180)) ([934f4f4](https://github.com/icoretech/warden-mcp/commit/934f4f4ee3cce68df19e6391dd2117f6e5fdccec))
 
 ## [0.2.38](https://github.com/icoretech/warden-mcp/compare/v0.2.37...v0.2.38) (2026-09-11)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.6.2 ([#178](https://github.com/icoretech/warden-mcp/issues/178)) ([11af473](https://github.com/icoretech/warden-mcp/commit/11af473c14b6fb89c3945ad69b3cb8fe010ae575))
+- **deps:** update dependency zod to ^4.6.2 ([#178](https://github.com/icoretech/warden-mcp/issues/178)) ([11af473](https://github.com/icoretech/warden-mcp/commit/11af473c14b6fb89c3945ad69b3cb8fe010ae575))
 
 ## [0.2.37](https://github.com/icoretech/warden-mcp/compare/v0.2.36...v0.2.37) (2026-09-10)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.6.1 ([#175](https://github.com/icoretech/warden-mcp/issues/175)) ([e41380e](https://github.com/icoretech/warden-mcp/commit/e41380e73d914a0d3689d8017ed490523055f3c6))
+- **deps:** update dependency zod to ^4.6.1 ([#175](https://github.com/icoretech/warden-mcp/issues/175)) ([e41380e](https://github.com/icoretech/warden-mcp/commit/e41380e73d914a0d3689d8017ed490523055f3c6))
 
 ## [0.2.36](https://github.com/icoretech/warden-mcp/compare/v0.2.35...v0.2.36) (2026-09-02)
 
-
 ### Bug Fixes
 
-* preserve shared Bitwarden sessions across processes ([19ff194](https://github.com/icoretech/warden-mcp/commit/19ff194893d7f88b174b6e40c4f7ced2b35ee612))
-* redact Bitwarden CLI failure details ([f48eb9b](https://github.com/icoretech/warden-mcp/commit/f48eb9b7be028c845fcad97d0cca51a4a656a518))
-* support Vaultwarden policies without revision dates ([342c77f](https://github.com/icoretech/warden-mcp/commit/342c77fbdc92efa72c562263f00a14f148adbc8d))
+- preserve shared Bitwarden sessions across processes ([19ff194](https://github.com/icoretech/warden-mcp/commit/19ff194893d7f88b174b6e40c4f7ced2b35ee612))
+- redact Bitwarden CLI failure details ([f48eb9b](https://github.com/icoretech/warden-mcp/commit/f48eb9b7be028c845fcad97d0cca51a4a656a518))
+- support Vaultwarden policies without revision dates ([342c77f](https://github.com/icoretech/warden-mcp/commit/342c77fbdc92efa72c562263f00a14f148adbc8d))
 
 ## [0.2.35](https://github.com/icoretech/warden-mcp/compare/v0.2.34...v0.2.35) (2026-08-30)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.5.4 ([#163](https://github.com/icoretech/warden-mcp/issues/163)) ([e942dc5](https://github.com/icoretech/warden-mcp/commit/e942dc51f3790431e27d7b2ae5a00d50cc9a1500))
+- **deps:** update dependency zod to ^4.5.4 ([#163](https://github.com/icoretech/warden-mcp/issues/163)) ([e942dc5](https://github.com/icoretech/warden-mcp/commit/e942dc51f3790431e27d7b2ae5a00d50cc9a1500))
 
 ## [0.2.34](https://github.com/icoretech/warden-mcp/compare/v0.2.33...v0.2.34) (2026-08-29)
 
-
 ### Bug Fixes
 
-* port Bitwarden CLI 2026.8.0 compatibility to main ([7ea6e2a](https://github.com/icoretech/warden-mcp/commit/7ea6e2a270f9844767cc4b15d1d00c21e83df850))
+- port Bitwarden CLI 2026.8.0 compatibility to main ([7ea6e2a](https://github.com/icoretech/warden-mcp/commit/7ea6e2a270f9844767cc4b15d1d00c21e83df850))
 
 ## [0.2.33](https://github.com/icoretech/warden-mcp/compare/v0.2.32...v0.2.33) (2026-08-29)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.5.2 ([#158](https://github.com/icoretech/warden-mcp/issues/158)) ([ed4cf4f](https://github.com/icoretech/warden-mcp/commit/ed4cf4fe131313e696a6b268532d79330c5623a1))
+- **deps:** update dependency zod to ^4.5.2 ([#158](https://github.com/icoretech/warden-mcp/issues/158)) ([ed4cf4f](https://github.com/icoretech/warden-mcp/commit/ed4cf4fe131313e696a6b268532d79330c5623a1))
 
 ## [0.2.32](https://github.com/icoretech/warden-mcp/compare/v0.2.31...v0.2.32) (2026-08-28)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.5.1 ([#156](https://github.com/icoretech/warden-mcp/issues/156)) ([cabfd44](https://github.com/icoretech/warden-mcp/commit/cabfd44eff0873126eca5564012456515bd75509))
+- **deps:** update dependency zod to ^4.5.1 ([#156](https://github.com/icoretech/warden-mcp/issues/156)) ([cabfd44](https://github.com/icoretech/warden-mcp/commit/cabfd44eff0873126eca5564012456515bd75509))
 
 ## [0.2.31](https://github.com/icoretech/warden-mcp/compare/v0.2.30...v0.2.31) (2026-08-16)
 
-
 ### Bug Fixes
 
-* **deps:** install Bitwarden CLI as a required dependency ([51ce0d9](https://github.com/icoretech/warden-mcp/commit/51ce0d941d388d785cad2ed0357e883aa7416cb8))
+- **deps:** install Bitwarden CLI as a required dependency ([51ce0d9](https://github.com/icoretech/warden-mcp/commit/51ce0d941d388d785cad2ed0357e883aa7416cb8))
 
 ## [0.2.30](https://github.com/icoretech/warden-mcp/compare/v0.2.29...v0.2.30) (2026-07-30)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @modelcontextprotocol/sdk to ^1.30.0 ([#133](https://github.com/icoretech/warden-mcp/issues/133)) ([2503c7e](https://github.com/icoretech/warden-mcp/commit/2503c7ef0f1b4f5a8d93de76a5ed20bc315ad374))
+- **deps:** update dependency @modelcontextprotocol/sdk to ^1.30.0 ([#133](https://github.com/icoretech/warden-mcp/issues/133)) ([2503c7e](https://github.com/icoretech/warden-mcp/commit/2503c7ef0f1b4f5a8d93de76a5ed20bc315ad374))
 
 ## [0.2.29](https://github.com/icoretech/warden-mcp/compare/v0.2.28...v0.2.29) (2026-07-07)
 
-
 ### Bug Fixes
 
-* reclaim stale auth locks ([71cd4a4](https://github.com/icoretech/warden-mcp/commit/71cd4a498636e0cebdbcab13ba24b75eaab46622))
+- reclaim stale auth locks ([71cd4a4](https://github.com/icoretech/warden-mcp/commit/71cd4a498636e0cebdbcab13ba24b75eaab46622))
 
 ## [0.2.28](https://github.com/icoretech/warden-mcp/compare/v0.2.27...v0.2.28) (2026-06-23)
 
-
 ### Bug Fixes
 
-* keep playwright image updates npm-sourced ([9a156ed](https://github.com/icoretech/warden-mcp/commit/9a156ed45a13c5424c55f691fcad3487d4526280))
+- keep playwright image updates npm-sourced ([9a156ed](https://github.com/icoretech/warden-mcp/commit/9a156ed45a13c5424c55f691fcad3487d4526280))
 
 ## [0.2.27](https://github.com/icoretech/warden-mcp/compare/v0.2.26...v0.2.27) (2026-06-22)
 
-
 ### Bug Fixes
 
-* align runtime docs and tool summaries ([4ff5922](https://github.com/icoretech/warden-mcp/commit/4ff5922201d798d0897c9f26b6d41ebf13a21acc))
+- align runtime docs and tool summaries ([4ff5922](https://github.com/icoretech/warden-mcp/commit/4ff5922201d798d0897c9f26b6d41ebf13a21acc))
 
 ## [0.2.26](https://github.com/icoretech/warden-mcp/compare/v0.2.25...v0.2.26) (2026-06-16)
 
-
 ### Bug Fixes
 
-* **deps:** refresh vulnerable npm transitives ([3d19234](https://github.com/icoretech/warden-mcp/commit/3d192347098f29b24a8da35fdf17c30ea1d49b49))
+- **deps:** refresh vulnerable npm transitives ([3d19234](https://github.com/icoretech/warden-mcp/commit/3d192347098f29b24a8da35fdf17c30ea1d49b49))
 
 ## [0.2.25](https://github.com/icoretech/warden-mcp/compare/v0.2.24...v0.2.25) (2026-06-16)
 
-
 ### Bug Fixes
 
-* **tools:** support Send email recipients ([1ff126c](https://github.com/icoretech/warden-mcp/commit/1ff126cf47903df74d325d9cfe21eebb865895d3))
+- **tools:** support Send email recipients ([1ff126c](https://github.com/icoretech/warden-mcp/commit/1ff126cf47903df74d325d9cfe21eebb865895d3))
 
 ## [0.2.24](https://github.com/icoretech/warden-mcp/compare/v0.2.23...v0.2.24) (2026-06-15)
 
-
 ### Bug Fixes
 
-* **tools:** guide stale attachment recovery ([bbc84fb](https://github.com/icoretech/warden-mcp/commit/bbc84fba8d77338642b82194bc74b6d8b9e34e5e))
+- **tools:** guide stale attachment recovery ([bbc84fb](https://github.com/icoretech/warden-mcp/commit/bbc84fba8d77338642b82194bc74b6d8b9e34e5e))
 
 ## [0.2.23](https://github.com/icoretech/warden-mcp/compare/v0.2.22...v0.2.23) (2026-06-08)
 
-
 ### Bug Fixes
 
-* **tools:** hide mutating tools in readonly mode ([9d4c682](https://github.com/icoretech/warden-mcp/commit/9d4c6826d600302225a30d361b391e545e4865c2))
+- **tools:** hide mutating tools in readonly mode ([9d4c682](https://github.com/icoretech/warden-mcp/commit/9d4c6826d600302225a30d361b391e545e4865c2))
 
 ## [0.2.22](https://github.com/icoretech/warden-mcp/compare/v0.2.21...v0.2.22) (2026-05-31)
 
-
 ### Bug Fixes
 
-* **sdk:** filter url search text locally ([8f52511](https://github.com/icoretech/warden-mcp/commit/8f52511aaef262666c7e6a65ca86e236c09fd52b))
+- **sdk:** filter url search text locally ([8f52511](https://github.com/icoretech/warden-mcp/commit/8f52511aaef262666c7e6a65ca86e236c09fd52b))
 
 ## [0.2.21](https://github.com/icoretech/warden-mcp/compare/v0.2.20...v0.2.21) (2026-05-31)
 
-
 ### Bug Fixes
 
-* **tools:** expose generated secrets in text output ([a3b8c51](https://github.com/icoretech/warden-mcp/commit/a3b8c5144926e133143e97db3c2a45de0e823812))
-* **tools:** expose scalar tool payloads in text output ([0cdcc14](https://github.com/icoretech/warden-mcp/commit/0cdcc14ef992931cffa6d0a1b77f8251a788ed2f))
+- **tools:** expose generated secrets in text output ([a3b8c51](https://github.com/icoretech/warden-mcp/commit/a3b8c5144926e133143e97db3c2a45de0e823812))
+- **tools:** expose scalar tool payloads in text output ([0cdcc14](https://github.com/icoretech/warden-mcp/commit/0cdcc14ef992931cffa6d0a1b77f8251a788ed2f))
 
 ## [0.2.20](https://github.com/icoretech/warden-mcp/compare/v0.2.19...v0.2.20) (2026-05-04)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.4.3 ([#80](https://github.com/icoretech/warden-mcp/issues/80)) ([ebf6ba5](https://github.com/icoretech/warden-mcp/commit/ebf6ba5682e7ed5006c9cd91da47be944569d26d))
+- **deps:** update dependency zod to ^4.4.3 ([#80](https://github.com/icoretech/warden-mcp/issues/80)) ([ebf6ba5](https://github.com/icoretech/warden-mcp/commit/ebf6ba5682e7ed5006c9cd91da47be944569d26d))
 
 ## [0.2.19](https://github.com/icoretech/warden-mcp/compare/v0.2.18...v0.2.19) (2026-05-04)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency zod to ^4.4.1 ([#75](https://github.com/icoretech/warden-mcp/issues/75)) ([43b2d54](https://github.com/icoretech/warden-mcp/commit/43b2d544bc1ed4ade46974277671692b146de691))
-* **deps:** update dependency zod to ^4.4.2 ([#78](https://github.com/icoretech/warden-mcp/issues/78)) ([2e60b06](https://github.com/icoretech/warden-mcp/commit/2e60b067ffd50161413d1086ca9857744de03848))
+- **deps:** update dependency zod to ^4.4.1 ([#75](https://github.com/icoretech/warden-mcp/issues/75)) ([43b2d54](https://github.com/icoretech/warden-mcp/commit/43b2d544bc1ed4ade46974277671692b146de691))
+- **deps:** update dependency zod to ^4.4.2 ([#78](https://github.com/icoretech/warden-mcp/issues/78)) ([2e60b06](https://github.com/icoretech/warden-mcp/commit/2e60b067ffd50161413d1086ca9857744de03848))
 
 ## [0.2.18](https://github.com/icoretech/warden-mcp/compare/v0.2.17...v0.2.18) (2026-04-29)
 
-
 ### Bug Fixes
 
-* **sdk:** download attachments from raw bytes ([c8dd867](https://github.com/icoretech/warden-mcp/commit/c8dd867b7d220641ee6a56167088f508002de7dc))
-* **tools:** expose attachment metadata in text output ([c314757](https://github.com/icoretech/warden-mcp/commit/c3147578f28ab12f6cf0ad8a3958e99d0dc66fbc))
+- **sdk:** download attachments from raw bytes ([c8dd867](https://github.com/icoretech/warden-mcp/commit/c8dd867b7d220641ee6a56167088f508002de7dc))
+- **tools:** expose attachment metadata in text output ([c314757](https://github.com/icoretech/warden-mcp/commit/c3147578f28ab12f6cf0ad8a3958e99d0dc66fbc))
 
 ## [0.2.17](https://github.com/icoretech/warden-mcp/compare/v0.2.16...v0.2.17) (2026-04-28)
 
-
 ### Bug Fixes
 
-* **tools:** improve text compatibility output ([89356bc](https://github.com/icoretech/warden-mcp/commit/89356bc2e9699588b256d88bb1610adec0c1a566))
+- **tools:** improve text compatibility output ([89356bc](https://github.com/icoretech/warden-mcp/commit/89356bc2e9699588b256d88bb1610adec0c1a566))
 
 ## [0.2.16](https://github.com/icoretech/warden-mcp/compare/v0.2.15...v0.2.16) (2026-04-28)
 
-
 ### Bug Fixes
 
-* **sdk:** report ambiguous credential candidates ([a569354](https://github.com/icoretech/warden-mcp/commit/a5693545da65beed5421783b935ff44c2a986d4d))
-* **tools:** expose actionable text results ([6e62b7a](https://github.com/icoretech/warden-mcp/commit/6e62b7ade5d9a8daa1e2ccb95ad38dd8d7c4676f))
+- **sdk:** report ambiguous credential candidates ([a569354](https://github.com/icoretech/warden-mcp/commit/a5693545da65beed5421783b935ff44c2a986d4d))
+- **tools:** expose actionable text results ([6e62b7a](https://github.com/icoretech/warden-mcp/commit/6e62b7ade5d9a8daa1e2ccb95ad38dd8d7c4676f))
 
 ## [0.2.15](https://github.com/icoretech/warden-mcp/compare/v0.2.14...v0.2.15) (2026-04-26)
 
-
 ### Bug Fixes
 
-* **status:** clarify lazy readiness recovery ([89d6a7d](https://github.com/icoretech/warden-mcp/commit/89d6a7dc8c35c6f701ee4518f7540058260449e9))
+- **status:** clarify lazy readiness recovery ([89d6a7d](https://github.com/icoretech/warden-mcp/commit/89d6a7dc8c35c6f701ee4518f7540058260449e9))
 
 ## [0.2.14](https://github.com/icoretech/warden-mcp/compare/v0.2.13...v0.2.14) (2026-04-26)
 
-
 ### Bug Fixes
 
-* **sdk:** fallback username lookup precisely ([aab1c2e](https://github.com/icoretech/warden-mcp/commit/aab1c2e69c37108e69467b5bce820841e6c2e750))
-* **session:** classify stale bitwarden sessions ([504b4ba](https://github.com/icoretech/warden-mcp/commit/504b4ba066b79c2a0808c6dda352140c39e3ae2e))
-* **session:** retry stale session operations once ([40969b0](https://github.com/icoretech/warden-mcp/commit/40969b0c8a1feca0e7ea028f9bb6e6bd4e5d6f1e))
-* **status:** reflect reusable sessions in vault readiness ([579e7b3](https://github.com/icoretech/warden-mcp/commit/579e7b39c9073c78b7c1842c79d045ccfc0ee9d9))
+- **sdk:** fallback username lookup precisely ([aab1c2e](https://github.com/icoretech/warden-mcp/commit/aab1c2e69c37108e69467b5bce820841e6c2e750))
+- **session:** classify stale bitwarden sessions ([504b4ba](https://github.com/icoretech/warden-mcp/commit/504b4ba066b79c2a0808c6dda352140c39e3ae2e))
+- **session:** retry stale session operations once ([40969b0](https://github.com/icoretech/warden-mcp/commit/40969b0c8a1feca0e7ea028f9bb6e6bd4e5d6f1e))
+- **status:** reflect reusable sessions in vault readiness ([579e7b3](https://github.com/icoretech/warden-mcp/commit/579e7b39c9073c78b7c1842c79d045ccfc0ee9d9))
 
 ## [0.2.13](https://github.com/icoretech/warden-mcp/compare/v0.2.12...v0.2.13) (2026-04-22)
 
-
 ### Bug Fixes
 
-* **session:** reuse persisted bw sessions across stdio workers ([58520d6](https://github.com/icoretech/warden-mcp/commit/58520d6a44d8ebf544abc099938c1102b13974b7))
+- **session:** reuse persisted bw sessions across stdio workers ([58520d6](https://github.com/icoretech/warden-mcp/commit/58520d6a44d8ebf544abc099938c1102b13974b7))
 
 ## [0.2.12](https://github.com/icoretech/warden-mcp/compare/v0.2.11...v0.2.12) (2026-04-22)
 
-
 ### Bug Fixes
 
-* **session:** avoid idle auth and serialize process unlocks ([a45765d](https://github.com/icoretech/warden-mcp/commit/a45765dc7d914d241dfed2bd722f7c1b5c29ac79))
-* **session:** create auth lock parent dirs before locking ([f780e00](https://github.com/icoretech/warden-mcp/commit/f780e00a42c1a716ac1aa3e2af075bfa2f50ff6e))
-* **status:** avoid unlock on cold stdio startup ([5e9628f](https://github.com/icoretech/warden-mcp/commit/5e9628f32e74f82d9bf63a567a6abbaefb896082))
+- **session:** avoid idle auth and serialize process unlocks ([a45765d](https://github.com/icoretech/warden-mcp/commit/a45765dc7d914d241dfed2bd722f7c1b5c29ac79))
+- **session:** create auth lock parent dirs before locking ([f780e00](https://github.com/icoretech/warden-mcp/commit/f780e00a42c1a716ac1aa3e2af075bfa2f50ff6e))
+- **status:** avoid unlock on cold stdio startup ([5e9628f](https://github.com/icoretech/warden-mcp/commit/5e9628f32e74f82d9bf63a567a6abbaefb896082))
 
 ## [0.2.11](https://github.com/icoretech/warden-mcp/compare/v0.2.10...v0.2.11) (2026-04-22)
 
-
 ### Bug Fixes
 
-* **stdio:** block startup on bw session warmup ([06d81f7](https://github.com/icoretech/warden-mcp/commit/06d81f7bf5f62bbe01d30b17b91072cba8e6f49c))
+- **stdio:** block startup on bw session warmup ([06d81f7](https://github.com/icoretech/warden-mcp/commit/06d81f7bf5f62bbe01d30b17b91072cba8e6f49c))
 
 ## [0.2.10](https://github.com/icoretech/warden-mcp/compare/v0.2.9...v0.2.10) (2026-04-22)
 
-
 ### Bug Fixes
 
-* **stdio:** prewarm bw sessions for hosted mcp clients ([5fb8bd9](https://github.com/icoretech/warden-mcp/commit/5fb8bd94068d00bade70e5be341c31730c2afec6))
+- **stdio:** prewarm bw sessions for hosted mcp clients ([5fb8bd9](https://github.com/icoretech/warden-mcp/commit/5fb8bd94068d00bade70e5be341c31730c2afec6))
 
 ## [0.2.9](https://github.com/icoretech/warden-mcp/compare/v0.2.8...v0.2.9) (2026-04-22)
 
-
 ### Bug Fixes
 
-* **session:** kill timed out bw process trees and stabilize cli appdata ([ab03a25](https://github.com/icoretech/warden-mcp/commit/ab03a255425b65e2753ebaa15f54778eae124569))
+- **session:** kill timed out bw process trees and stabilize cli appdata ([ab03a25](https://github.com/icoretech/warden-mcp/commit/ab03a255425b65e2753ebaa15f54778eae124569))
 
 ## [0.2.8](https://github.com/icoretech/warden-mcp/compare/v0.2.7...v0.2.8) (2026-04-07)
 
-
 ### Features
 
-* **warden-mcp:** add text-only compat mode ([fcbedb5](https://github.com/icoretech/warden-mcp/commit/fcbedb5e520351acbd932b44dbf63c0ea9f99884))
+- **warden-mcp:** add text-only compat mode ([fcbedb5](https://github.com/icoretech/warden-mcp/commit/fcbedb5e520351acbd932b44dbf63c0ea9f99884))
 
 ## [0.2.7](https://github.com/icoretech/warden-mcp/compare/v0.2.6...v0.2.7) (2026-04-05)
 
-
 ### Bug Fixes
 
-* **docker:** remove stale patches copy ([817b373](https://github.com/icoretech/warden-mcp/commit/817b373aa885eb873659423ac2a47f5462df735d))
+- **docker:** remove stale patches copy ([817b373](https://github.com/icoretech/warden-mcp/commit/817b373aa885eb873659423ac2a47f5462df735d))
 
 ## [0.2.6](https://github.com/icoretech/warden-mcp/compare/v0.2.5...v0.2.6) (2026-04-05)
 
-
 ### Bug Fixes
 
-* **session:** avoid relogin when bw host is unchanged ([3acc13e](https://github.com/icoretech/warden-mcp/commit/3acc13eaf299b20ef437cbc836423671b46c83d6))
+- **session:** avoid relogin when bw host is unchanged ([3acc13e](https://github.com/icoretech/warden-mcp/commit/3acc13eaf299b20ef437cbc836423671b46c83d6))
 
 ## [0.2.5](https://github.com/icoretech/warden-mcp/compare/v0.2.4...v0.2.5) (2026-04-03)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @modelcontextprotocol/sdk to ^1.29.0 ([#43](https://github.com/icoretech/warden-mcp/issues/43)) ([e9d7f53](https://github.com/icoretech/warden-mcp/commit/e9d7f53d5b7e8d6957425f70c39453401cd6602f))
-* harden dependency update compatibility ([2f4ccb4](https://github.com/icoretech/warden-mcp/commit/2f4ccb4b42420dc9c7b060756ebe168feb7eff66))
+- **deps:** update dependency @modelcontextprotocol/sdk to ^1.29.0 ([#43](https://github.com/icoretech/warden-mcp/issues/43)) ([e9d7f53](https://github.com/icoretech/warden-mcp/commit/e9d7f53d5b7e8d6957425f70c39453401cd6602f))
+- harden dependency update compatibility ([2f4ccb4](https://github.com/icoretech/warden-mcp/commit/2f4ccb4b42420dc9c7b060756ebe168feb7eff66))
 
 ## [0.2.4](https://github.com/icoretech/warden-mcp/compare/v0.2.3...v0.2.4) (2026-03-27)
 
-
 ### Bug Fixes
 
-* align mcp server version metadata ([f1aa144](https://github.com/icoretech/warden-mcp/commit/f1aa14416ff794c0758321f1a641a6d30d4e9525))
-* annotate mutating mcp tools ([871dec4](https://github.com/icoretech/warden-mcp/commit/871dec446d06630cd6592b3ac92b06e0be9c85e8))
-* **deps:** update dependency @modelcontextprotocol/sdk to ^1.28.0 ([#9](https://github.com/icoretech/warden-mcp/issues/9)) ([865633d](https://github.com/icoretech/warden-mcp/commit/865633d1ac78adfef6794961a460283f22d6b35e))
+- align mcp server version metadata ([f1aa144](https://github.com/icoretech/warden-mcp/commit/f1aa14416ff794c0758321f1a641a6d30d4e9525))
+- annotate mutating mcp tools ([871dec4](https://github.com/icoretech/warden-mcp/commit/871dec446d06630cd6592b3ac92b06e0be9c85e8))
+- **deps:** update dependency @modelcontextprotocol/sdk to ^1.28.0 ([#9](https://github.com/icoretech/warden-mcp/issues/9)) ([865633d](https://github.com/icoretech/warden-mcp/commit/865633d1ac78adfef6794961a460283f22d6b35e))
 
 ## [0.2.3](https://github.com/icoretech/warden-mcp/compare/v0.2.2...v0.2.3) (2026-03-25)
 
-
 ### Features
 
-* add sync and sdk_version tools ([18dac1f](https://github.com/icoretech/warden-mcp/commit/18dac1f8076a63f7f4fa395fd93224af28d34bb2))
+- add sync and sdk_version tools ([18dac1f](https://github.com/icoretech/warden-mcp/commit/18dac1f8076a63f7f4fa395fd93224af28d34bb2))
 
 
 ### Bug Fixes
 
-* use bw version for sdk_version ([81eee55](https://github.com/icoretech/warden-mcp/commit/81eee556843d87637135fcd4fbed6aa6f9e42e56))
+- use bw version for sdk_version ([81eee55](https://github.com/icoretech/warden-mcp/commit/81eee556843d87637135fcd4fbed6aa6f9e42e56))
 
 ## [0.2.2](https://github.com/icoretech/warden-mcp/compare/v0.2.1...v0.2.2) (2026-03-23)
 
-
 ### Bug Fixes
 
-* remove unsettled top-level await warning ([3b251b3](https://github.com/icoretech/warden-mcp/commit/3b251b3784ee70a8cfc540102968b07f1931d129))
+- remove unsettled top-level await warning ([3b251b3](https://github.com/icoretech/warden-mcp/commit/3b251b3784ee70a8cfc540102968b07f1931d129))
 
 ## [0.2.1](https://github.com/icoretech/warden-mcp/compare/v0.2.0...v0.2.1) (2026-03-23)
 
-
 ### Bug Fixes
 
-* bootstrap patch-package app root for npx installs ([21a88bd](https://github.com/icoretech/warden-mcp/commit/21a88bd181a1b452fb94e811b54dfa13ba3a0699))
+- bootstrap patch-package app root for npx installs ([21a88bd](https://github.com/icoretech/warden-mcp/commit/21a88bd181a1b452fb94e811b54dfa13ba3a0699))
 
 ## [0.2.0](https://github.com/icoretech/warden-mcp/compare/v0.1.21...v0.2.0) (2026-03-23)
 
-
 ### Bug Fixes
 
-* default tool names to underscore separator ([0836b1e](https://github.com/icoretech/warden-mcp/commit/0836b1e14445289eb9783fcfd35fe77db47d05da))
+- default tool names to underscore separator ([0836b1e](https://github.com/icoretech/warden-mcp/commit/0836b1e14445289eb9783fcfd35fe77db47d05da))
 
 
 ### Miscellaneous Chores
 
-* release 0.2.0 ([e7c0a48](https://github.com/icoretech/warden-mcp/commit/e7c0a48aa74fba863c35ff94853f454c77804031))
+- release 0.2.0 ([e7c0a48](https://github.com/icoretech/warden-mcp/commit/e7c0a48aa74fba863c35ff94853f454c77804031))
 
 ## [0.1.21](https://github.com/icoretech/warden-mcp/compare/v0.1.20...v0.1.21) (2026-03-22)
 
-
 ### Bug Fixes
 
-* patch hoisted bw installs correctly ([405621f](https://github.com/icoretech/warden-mcp/commit/405621f5c7ef2291b9fc926a6aa415b9acd04c5a))
+- patch hoisted bw installs correctly ([405621f](https://github.com/icoretech/warden-mcp/commit/405621f5c7ef2291b9fc926a6aa415b9acd04c5a))
 
 ## [0.1.20](https://github.com/icoretech/warden-mcp/compare/v0.1.19...v0.1.20) (2026-03-22)
 
-
 ### Bug Fixes
 
-* reset stale macos bw cli state ([4520fcb](https://github.com/icoretech/warden-mcp/commit/4520fcb620cedc667b8f053f03df76136486b440))
+- reset stale macos bw cli state ([4520fcb](https://github.com/icoretech/warden-mcp/commit/4520fcb620cedc667b8f053f03df76136486b440))
 
 ## [0.1.19](https://github.com/icoretech/warden-mcp/compare/v0.1.18...v0.1.19) (2026-03-22)
 
-
 ### Bug Fixes
 
-* **docker:** ship patched bw cli in image ([325d744](https://github.com/icoretech/warden-mcp/commit/325d7449e1371888a93d228822a164ed1522e9bf))
+- **docker:** ship patched bw cli in image ([325d744](https://github.com/icoretech/warden-mcp/commit/325d7449e1371888a93d228822a164ed1522e9bf))
 
 ## [0.1.18](https://github.com/icoretech/warden-mcp/compare/v0.1.17...v0.1.18) (2026-03-22)
 
-
 ### Features
 
-* include totp timing metadata ([3a72647](https://github.com/icoretech/warden-mcp/commit/3a7264779b1e2df69fb34bcabf50b4ba94d3d686))
+- include totp timing metadata ([3a72647](https://github.com/icoretech/warden-mcp/commit/3a7264779b1e2df69fb34bcabf50b4ba94d3d686))
 
 
 ### Bug Fixes
 
-* allow degraded startup without bw ([748deba](https://github.com/icoretech/warden-mcp/commit/748deba3202affd8d9f17752803d344e7cc6da29))
-* use patch-package for bundled bw compat ([d509b61](https://github.com/icoretech/warden-mcp/commit/d509b611312e4fa963d2c0d2b458cf9d2946cb3f))
+- allow degraded startup without bw ([748deba](https://github.com/icoretech/warden-mcp/commit/748deba3202affd8d9f17752803d344e7cc6da29))
+- use patch-package for bundled bw compat ([d509b61](https://github.com/icoretech/warden-mcp/commit/d509b611312e4fa963d2c0d2b458cf9d2946cb3f))
 
 ## [0.1.17](https://github.com/icoretech/warden-mcp/compare/v0.1.16...v0.1.17) (2026-03-22)
 
-
 ### Bug Fixes
 
-* make compose ci use bundled bw candidate ([eae46f8](https://github.com/icoretech/warden-mcp/commit/eae46f8f208a8c70010cf017f29308dd89845c71))
-* retry post-login unlock for bw auth ([7641433](https://github.com/icoretech/warden-mcp/commit/764143358de2c5c5f4d157fb521f034fa47252ab))
+- make compose ci use bundled bw candidate ([eae46f8](https://github.com/icoretech/warden-mcp/commit/eae46f8f208a8c70010cf017f29308dd89845c71))
+- retry post-login unlock for bw auth ([7641433](https://github.com/icoretech/warden-mcp/commit/764143358de2c5c5f4d157fb521f034fa47252ab))
 
 ## [0.1.16](https://github.com/icoretech/warden-mcp/compare/v0.1.15...v0.1.16) (2026-03-22)
 
-
 ### Bug Fixes
 
-* stabilize vaultwarden bootstrap smoke ([8060807](https://github.com/icoretech/warden-mcp/commit/806080785e921449452046037cb9a25ef7d70f49))
+- stabilize vaultwarden bootstrap smoke ([8060807](https://github.com/icoretech/warden-mcp/commit/806080785e921449452046037cb9a25ef7d70f49))
 
 ## [0.1.15](https://github.com/icoretech/warden-mcp/compare/v0.1.14...v0.1.15) (2026-03-22)
 
-
 ### Bug Fixes
 
-* add api-key compatibility smoke coverage ([c7f0639](https://github.com/icoretech/warden-mcp/commit/c7f063955b3ca369f8c7751203c8cbee58bad10b))
+- add api-key compatibility smoke coverage ([c7f0639](https://github.com/icoretech/warden-mcp/commit/c7f063955b3ca369f8c7751203c8cbee58bad10b))
 
 ## [0.1.14](https://github.com/icoretech/warden-mcp/compare/v0.1.13...v0.1.14) (2026-03-22)
 
-
 ### Bug Fixes
 
-* harden bw cli failure handling ([8eb9e5c](https://github.com/icoretech/warden-mcp/commit/8eb9e5cca7cf72e43b6796499e17e8829c2d8a54))
+- harden bw cli failure handling ([8eb9e5c](https://github.com/icoretech/warden-mcp/commit/8eb9e5cca7cf72e43b6796499e17e8829c2d8a54))
 
 ## [0.1.13](https://github.com/icoretech/warden-mcp/compare/v0.1.12...v0.1.13) (2026-03-22)
 
-
 ### Bug Fixes
 
-* keep http transport entrypoint alive ([6223da6](https://github.com/icoretech/warden-mcp/commit/6223da67cea4dfe851a0ce00ba7ee183fd92accd))
+- keep http transport entrypoint alive ([6223da6](https://github.com/icoretech/warden-mcp/commit/6223da67cea4dfe851a0ce00ba7ee183fd92accd))
 
 ## [0.1.12](https://github.com/icoretech/warden-mcp/compare/v0.1.11...v0.1.12) (2026-03-22)
 
-
 ### Features
 
-* add --stdio flag and WARDEN_MCP_STDIO env var to server entry ([2a6b49e](https://github.com/icoretech/warden-mcp/commit/2a6b49e87504e7a85e1f1295029c230fe786baab))
-* add bin/warden-mcp.js CLI entry with @bitwarden/cli resolution ([244d372](https://github.com/icoretech/warden-mcp/commit/244d372284b60a0d4f29ae38f72a6a6897108f6e))
-* add env var fallback to bwEnvFromHeadersOrEnv ([0a7c6f3](https://github.com/icoretech/warden-mcp/commit/0a7c6f392b9c7e26945ab3b175df2d5976ef163b))
-* add NOREVEAL env var to force-disable secret reveals ([034286c](https://github.com/icoretech/warden-mcp/commit/034286c2c17e3442f7a6456fd3e6068f7fbfcd8f))
-* add stdio transport ([9ecc99c](https://github.com/icoretech/warden-mcp/commit/9ecc99c54ddec29265aa19bd79f8d31b235a0a22))
-* **docker:** publish multi-arch image to ghcr.io ([2c2f8c7](https://github.com/icoretech/warden-mcp/commit/2c2f8c7c627ae3efaca506d7a56e80b327de0827))
+- add --stdio flag and WARDEN_MCP_STDIO env var to server entry ([2a6b49e](https://github.com/icoretech/warden-mcp/commit/2a6b49e87504e7a85e1f1295029c230fe786baab))
+- add bin/warden-mcp.js CLI entry with @bitwarden/cli resolution ([244d372](https://github.com/icoretech/warden-mcp/commit/244d372284b60a0d4f29ae38f72a6a6897108f6e))
+- add env var fallback to bwEnvFromHeadersOrEnv ([0a7c6f3](https://github.com/icoretech/warden-mcp/commit/0a7c6f392b9c7e26945ab3b175df2d5976ef163b))
+- add NOREVEAL env var to force-disable secret reveals ([034286c](https://github.com/icoretech/warden-mcp/commit/034286c2c17e3442f7a6456fd3e6068f7fbfcd8f))
+- add stdio transport ([9ecc99c](https://github.com/icoretech/warden-mcp/commit/9ecc99c54ddec29265aa19bd79f8d31b235a0a22))
+- **docker:** publish multi-arch image to ghcr.io ([2c2f8c7](https://github.com/icoretech/warden-mcp/commit/2c2f8c7c627ae3efaca506d7a56e80b327de0827))
 
 
 ### Bug Fixes
 
-* add explicit private:false, add headers-priority test ([ef9d5a1](https://github.com/icoretech/warden-mcp/commit/ef9d5a1981ddf74d8538bbadd0c149b906eaf074))
-* **biome:** ignore glama.json formatting ([a7e55e1](https://github.com/icoretech/warden-mcp/commit/a7e55e1e2b72fd2c4db3b1783cb274bad5e338c4))
-* **biome:** ignore package.json formatting ([1d916f4](https://github.com/icoretech/warden-mcp/commit/1d916f4d2d3159cc1d1b327a8266d9a935c2bf5c))
-* **biome:** ignore release-managed json formatting ([7dbf5e8](https://github.com/icoretech/warden-mcp/commit/7dbf5e85170d9fccd40d60810a25a0e2afad4792))
-* **biome:** use package.json expand override ([1eb7a2c](https://github.com/icoretech/warden-mcp/commit/1eb7a2c6345a6b536fc783ca76a7bea54fc1234d))
-* **ci:** enable npm trusted publishing ([9a8f2af](https://github.com/icoretech/warden-mcp/commit/9a8f2afa0b50bc69567195e89e65b03d7c66d019))
-* **ci:** replace non-existent rhysd/actionlint-action with docker image ([01baeaa](https://github.com/icoretech/warden-mcp/commit/01baeaa2486265b0427c931c6986b1284363fcbc))
-* **ci:** scope GitHub Actions permissions to least privilege ([6837214](https://github.com/icoretech/warden-mcp/commit/6837214bb8d60008f5d9852782d1c72a302ff1d4))
-* **ci:** suppress shellcheck SC2034 in session-flood-guardrail workflow ([8bde88e](https://github.com/icoretech/warden-mcp/commit/8bde88e7f58b7fdd69b5f12ccb85e8a7c704318d))
-* **ci:** switch package publishing from github packages to npmjs ([7bbda65](https://github.com/icoretech/warden-mcp/commit/7bbda656f4141deb3eaf0252fc46efe40ee550d8))
-* **docker:** use release-please version outputs for image tags ([0c2b6a9](https://github.com/icoretech/warden-mcp/commit/0c2b6a93ad332bb458028c4b3ea99583bca42d9f))
-* drop component prefix from release tags ([f2000b1](https://github.com/icoretech/warden-mcp/commit/f2000b1a3de4bdb25e51de5b68d572752570c173))
-* **package:** add npm keywords ([3603fc2](https://github.com/icoretech/warden-mcp/commit/3603fc24ccf8d569c2c8967db9e039cf9931e4cf))
-* pin bundled bw cli to 2026.1.0 ([82731c7](https://github.com/icoretech/warden-mcp/commit/82731c7f0bd466d60d3f86e40810d9567d4f5c66))
-* **renovate:** keep config PRs lint-clean ([e510d94](https://github.com/icoretech/warden-mcp/commit/e510d94c6e97df7946808710d3363e6ebb4166db))
-* resolve noAsyncPromiseExecutor lint error in stdio transport ([fdde3eb](https://github.com/icoretech/warden-mcp/commit/fdde3eb861c281562f1bf7e1a92fa33a1f998434))
-* **security:** disable env credential fallback in HTTP mode by default ([7c061ee](https://github.com/icoretech/warden-mcp/commit/7c061ee433edc0454a0f5848c3213fd87f7247c4))
-* **security:** prevent CLI option injection in send/receive commands ([284ef75](https://github.com/icoretech/warden-mcp/commit/284ef75a6f44d508938526fcfd3ff688bf6ab20d))
-* **security:** remove raw CLI output from JSON parse error messages ([97e59e8](https://github.com/icoretech/warden-mcp/commit/97e59e86be065025bc372d1fcf60fbdc36e85786))
-* **security:** validate receive URL is HTTPS before passing to bw CLI ([3932c5d](https://github.com/icoretech/warden-mcp/commit/3932c5dc27f71a73d49bc02fc7a5db35048dade0))
-* skip --nointeraction for bw auth bootstrap ([368bc5d](https://github.com/icoretech/warden-mcp/commit/368bc5d06e4d844a33b5704cc561bb36fe0f7856))
-* **ux:** clarify stdio credential requirements ([1dd8273](https://github.com/icoretech/warden-mcp/commit/1dd8273f44acd8dea9c8d553c5913a5d7a7ac9ae))
+- add explicit private:false, add headers-priority test ([ef9d5a1](https://github.com/icoretech/warden-mcp/commit/ef9d5a1981ddf74d8538bbadd0c149b906eaf074))
+- **biome:** ignore glama.json formatting ([a7e55e1](https://github.com/icoretech/warden-mcp/commit/a7e55e1e2b72fd2c4db3b1783cb274bad5e338c4))
+- **biome:** ignore package.json formatting ([1d916f4](https://github.com/icoretech/warden-mcp/commit/1d916f4d2d3159cc1d1b327a8266d9a935c2bf5c))
+- **biome:** ignore release-managed json formatting ([7dbf5e8](https://github.com/icoretech/warden-mcp/commit/7dbf5e85170d9fccd40d60810a25a0e2afad4792))
+- **biome:** use package.json expand override ([1eb7a2c](https://github.com/icoretech/warden-mcp/commit/1eb7a2c6345a6b536fc783ca76a7bea54fc1234d))
+- **ci:** enable npm trusted publishing ([9a8f2af](https://github.com/icoretech/warden-mcp/commit/9a8f2afa0b50bc69567195e89e65b03d7c66d019))
+- **ci:** replace non-existent rhysd/actionlint-action with docker image ([01baeaa](https://github.com/icoretech/warden-mcp/commit/01baeaa2486265b0427c931c6986b1284363fcbc))
+- **ci:** scope GitHub Actions permissions to least privilege ([6837214](https://github.com/icoretech/warden-mcp/commit/6837214bb8d60008f5d9852782d1c72a302ff1d4))
+- **ci:** suppress shellcheck SC2034 in session-flood-guardrail workflow ([8bde88e](https://github.com/icoretech/warden-mcp/commit/8bde88e7f58b7fdd69b5f12ccb85e8a7c704318d))
+- **ci:** switch package publishing from github packages to npmjs ([7bbda65](https://github.com/icoretech/warden-mcp/commit/7bbda656f4141deb3eaf0252fc46efe40ee550d8))
+- **docker:** use release-please version outputs for image tags ([0c2b6a9](https://github.com/icoretech/warden-mcp/commit/0c2b6a93ad332bb458028c4b3ea99583bca42d9f))
+- drop component prefix from release tags ([f2000b1](https://github.com/icoretech/warden-mcp/commit/f2000b1a3de4bdb25e51de5b68d572752570c173))
+- **package:** add npm keywords ([3603fc2](https://github.com/icoretech/warden-mcp/commit/3603fc24ccf8d569c2c8967db9e039cf9931e4cf))
+- pin bundled bw cli to 2026.1.0 ([82731c7](https://github.com/icoretech/warden-mcp/commit/82731c7f0bd466d60d3f86e40810d9567d4f5c66))
+- **renovate:** keep config PRs lint-clean ([e510d94](https://github.com/icoretech/warden-mcp/commit/e510d94c6e97df7946808710d3363e6ebb4166db))
+- resolve noAsyncPromiseExecutor lint error in stdio transport ([fdde3eb](https://github.com/icoretech/warden-mcp/commit/fdde3eb861c281562f1bf7e1a92fa33a1f998434))
+- **security:** disable env credential fallback in HTTP mode by default ([7c061ee](https://github.com/icoretech/warden-mcp/commit/7c061ee433edc0454a0f5848c3213fd87f7247c4))
+- **security:** prevent CLI option injection in send/receive commands ([284ef75](https://github.com/icoretech/warden-mcp/commit/284ef75a6f44d508938526fcfd3ff688bf6ab20d))
+- **security:** remove raw CLI output from JSON parse error messages ([97e59e8](https://github.com/icoretech/warden-mcp/commit/97e59e86be065025bc372d1fcf60fbdc36e85786))
+- **security:** validate receive URL is HTTPS before passing to bw CLI ([3932c5d](https://github.com/icoretech/warden-mcp/commit/3932c5dc27f71a73d49bc02fc7a5db35048dade0))
+- skip --nointeraction for bw auth bootstrap ([368bc5d](https://github.com/icoretech/warden-mcp/commit/368bc5d06e4d844a33b5704cc561bb36fe0f7856))
+- **ux:** clarify stdio credential requirements ([1dd8273](https://github.com/icoretech/warden-mcp/commit/1dd8273f44acd8dea9c8d553c5913a5d7a7ac9ae))
 
 ## [0.1.11](https://github.com/icoretech/warden-mcp/compare/v0.1.10...v0.1.11) (2026-03-22)
 
-
 ### Bug Fixes
 
-* pin bundled bw cli to 2026.1.0 ([82731c7](https://github.com/icoretech/warden-mcp/commit/82731c7f0bd466d60d3f86e40810d9567d4f5c66))
+- pin bundled bw cli to 2026.1.0 ([82731c7](https://github.com/icoretech/warden-mcp/commit/82731c7f0bd466d60d3f86e40810d9567d4f5c66))
 
 ## [0.1.10](https://github.com/icoretech/warden-mcp/compare/v0.1.9...v0.1.10) (2026-03-22)
 
-
 ### Bug Fixes
 
-* skip --nointeraction for bw auth bootstrap ([368bc5d](https://github.com/icoretech/warden-mcp/commit/368bc5d06e4d844a33b5704cc561bb36fe0f7856))
+- skip --nointeraction for bw auth bootstrap ([368bc5d](https://github.com/icoretech/warden-mcp/commit/368bc5d06e4d844a33b5704cc561bb36fe0f7856))
 
 ## [0.1.9](https://github.com/icoretech/warden-mcp/compare/v0.1.8...v0.1.9) (2026-03-21)
 
-
 ### Features
 
-* add NOREVEAL env var to force-disable secret reveals ([034286c](https://github.com/icoretech/warden-mcp/commit/034286c2c17e3442f7a6456fd3e6068f7fbfcd8f))
+- add NOREVEAL env var to force-disable secret reveals ([034286c](https://github.com/icoretech/warden-mcp/commit/034286c2c17e3442f7a6456fd3e6068f7fbfcd8f))
 
 
 ### Bug Fixes
 
-* **security:** validate receive URL is HTTPS before passing to bw CLI ([3932c5d](https://github.com/icoretech/warden-mcp/commit/3932c5dc27f71a73d49bc02fc7a5db35048dade0))
+- **security:** validate receive URL is HTTPS before passing to bw CLI ([3932c5d](https://github.com/icoretech/warden-mcp/commit/3932c5dc27f71a73d49bc02fc7a5db35048dade0))
 
 ## [0.1.8](https://github.com/icoretech/warden-mcp/compare/v0.1.7...v0.1.8) (2026-03-21)
 
-
 ### Bug Fixes
 
-* **security:** remove raw CLI output from JSON parse error messages ([97e59e8](https://github.com/icoretech/warden-mcp/commit/97e59e86be065025bc372d1fcf60fbdc36e85786))
+- **security:** remove raw CLI output from JSON parse error messages ([97e59e8](https://github.com/icoretech/warden-mcp/commit/97e59e86be065025bc372d1fcf60fbdc36e85786))
 
 ## [0.1.7](https://github.com/icoretech/warden-mcp/compare/v0.1.6...v0.1.7) (2026-03-21)
 
-
 ### Bug Fixes
 
-* **ci:** scope GitHub Actions permissions to least privilege ([6837214](https://github.com/icoretech/warden-mcp/commit/6837214bb8d60008f5d9852782d1c72a302ff1d4))
-* **security:** disable env credential fallback in HTTP mode by default ([7c061ee](https://github.com/icoretech/warden-mcp/commit/7c061ee433edc0454a0f5848c3213fd87f7247c4))
-* **security:** prevent CLI option injection in send/receive commands ([284ef75](https://github.com/icoretech/warden-mcp/commit/284ef75a6f44d508938526fcfd3ff688bf6ab20d))
+- **ci:** scope GitHub Actions permissions to least privilege ([6837214](https://github.com/icoretech/warden-mcp/commit/6837214bb8d60008f5d9852782d1c72a302ff1d4))
+- **security:** disable env credential fallback in HTTP mode by default ([7c061ee](https://github.com/icoretech/warden-mcp/commit/7c061ee433edc0454a0f5848c3213fd87f7247c4))
+- **security:** prevent CLI option injection in send/receive commands ([284ef75](https://github.com/icoretech/warden-mcp/commit/284ef75a6f44d508938526fcfd3ff688bf6ab20d))
 
 ## [0.1.6](https://github.com/icoretech/warden-mcp/compare/v0.1.5...v0.1.6) (2026-03-21)
 
-
 ### Bug Fixes
 
-* **biome:** ignore glama.json formatting ([a7e55e1](https://github.com/icoretech/warden-mcp/commit/a7e55e1e2b72fd2c4db3b1783cb274bad5e338c4))
+- **biome:** ignore glama.json formatting ([a7e55e1](https://github.com/icoretech/warden-mcp/commit/a7e55e1e2b72fd2c4db3b1783cb274bad5e338c4))
 
 ## [0.1.5](https://github.com/icoretech/warden-mcp/compare/v0.1.4...v0.1.5) (2026-03-21)
 
-
 ### Features
 
-* add --stdio flag and WARDEN_MCP_STDIO env var to server entry ([2a6b49e](https://github.com/icoretech/warden-mcp/commit/2a6b49e87504e7a85e1f1295029c230fe786baab))
-* add bin/warden-mcp.js CLI entry with @bitwarden/cli resolution ([244d372](https://github.com/icoretech/warden-mcp/commit/244d372284b60a0d4f29ae38f72a6a6897108f6e))
-* add env var fallback to bwEnvFromHeadersOrEnv ([0a7c6f3](https://github.com/icoretech/warden-mcp/commit/0a7c6f392b9c7e26945ab3b175df2d5976ef163b))
-* add stdio transport ([9ecc99c](https://github.com/icoretech/warden-mcp/commit/9ecc99c54ddec29265aa19bd79f8d31b235a0a22))
-* **docker:** publish multi-arch image to ghcr.io ([2c2f8c7](https://github.com/icoretech/warden-mcp/commit/2c2f8c7c627ae3efaca506d7a56e80b327de0827))
+- add --stdio flag and WARDEN_MCP_STDIO env var to server entry ([2a6b49e](https://github.com/icoretech/warden-mcp/commit/2a6b49e87504e7a85e1f1295029c230fe786baab))
+- add bin/warden-mcp.js CLI entry with @bitwarden/cli resolution ([244d372](https://github.com/icoretech/warden-mcp/commit/244d372284b60a0d4f29ae38f72a6a6897108f6e))
+- add env var fallback to bwEnvFromHeadersOrEnv ([0a7c6f3](https://github.com/icoretech/warden-mcp/commit/0a7c6f392b9c7e26945ab3b175df2d5976ef163b))
+- add stdio transport ([9ecc99c](https://github.com/icoretech/warden-mcp/commit/9ecc99c54ddec29265aa19bd79f8d31b235a0a22))
+- **docker:** publish multi-arch image to ghcr.io ([2c2f8c7](https://github.com/icoretech/warden-mcp/commit/2c2f8c7c627ae3efaca506d7a56e80b327de0827))
 
 
 ### Bug Fixes
 
-* add explicit private:false, add headers-priority test ([ef9d5a1](https://github.com/icoretech/warden-mcp/commit/ef9d5a1981ddf74d8538bbadd0c149b906eaf074))
-* **biome:** ignore package.json formatting ([1d916f4](https://github.com/icoretech/warden-mcp/commit/1d916f4d2d3159cc1d1b327a8266d9a935c2bf5c))
-* **biome:** ignore release-managed json formatting ([7dbf5e8](https://github.com/icoretech/warden-mcp/commit/7dbf5e85170d9fccd40d60810a25a0e2afad4792))
-* **biome:** use package.json expand override ([1eb7a2c](https://github.com/icoretech/warden-mcp/commit/1eb7a2c6345a6b536fc783ca76a7bea54fc1234d))
-* **ci:** enable npm trusted publishing ([9a8f2af](https://github.com/icoretech/warden-mcp/commit/9a8f2afa0b50bc69567195e89e65b03d7c66d019))
-* **ci:** replace non-existent rhysd/actionlint-action with docker image ([01baeaa](https://github.com/icoretech/warden-mcp/commit/01baeaa2486265b0427c931c6986b1284363fcbc))
-* **ci:** suppress shellcheck SC2034 in session-flood-guardrail workflow ([8bde88e](https://github.com/icoretech/warden-mcp/commit/8bde88e7f58b7fdd69b5f12ccb85e8a7c704318d))
-* **ci:** switch package publishing from github packages to npmjs ([7bbda65](https://github.com/icoretech/warden-mcp/commit/7bbda656f4141deb3eaf0252fc46efe40ee550d8))
-* **docker:** use release-please version outputs for image tags ([0c2b6a9](https://github.com/icoretech/warden-mcp/commit/0c2b6a93ad332bb458028c4b3ea99583bca42d9f))
-* drop component prefix from release tags ([f2000b1](https://github.com/icoretech/warden-mcp/commit/f2000b1a3de4bdb25e51de5b68d572752570c173))
-* **package:** add npm keywords ([3603fc2](https://github.com/icoretech/warden-mcp/commit/3603fc24ccf8d569c2c8967db9e039cf9931e4cf))
-* **renovate:** keep config PRs lint-clean ([e510d94](https://github.com/icoretech/warden-mcp/commit/e510d94c6e97df7946808710d3363e6ebb4166db))
-* resolve noAsyncPromiseExecutor lint error in stdio transport ([fdde3eb](https://github.com/icoretech/warden-mcp/commit/fdde3eb861c281562f1bf7e1a92fa33a1f998434))
-* **ux:** clarify stdio credential requirements ([1dd8273](https://github.com/icoretech/warden-mcp/commit/1dd8273f44acd8dea9c8d553c5913a5d7a7ac9ae))
+- add explicit private:false, add headers-priority test ([ef9d5a1](https://github.com/icoretech/warden-mcp/commit/ef9d5a1981ddf74d8538bbadd0c149b906eaf074))
+- **biome:** ignore package.json formatting ([1d916f4](https://github.com/icoretech/warden-mcp/commit/1d916f4d2d3159cc1d1b327a8266d9a935c2bf5c))
+- **biome:** ignore release-managed json formatting ([7dbf5e8](https://github.com/icoretech/warden-mcp/commit/7dbf5e85170d9fccd40d60810a25a0e2afad4792))
+- **biome:** use package.json expand override ([1eb7a2c](https://github.com/icoretech/warden-mcp/commit/1eb7a2c6345a6b536fc783ca76a7bea54fc1234d))
+- **ci:** enable npm trusted publishing ([9a8f2af](https://github.com/icoretech/warden-mcp/commit/9a8f2afa0b50bc69567195e89e65b03d7c66d019))
+- **ci:** replace non-existent rhysd/actionlint-action with docker image ([01baeaa](https://github.com/icoretech/warden-mcp/commit/01baeaa2486265b0427c931c6986b1284363fcbc))
+- **ci:** suppress shellcheck SC2034 in session-flood-guardrail workflow ([8bde88e](https://github.com/icoretech/warden-mcp/commit/8bde88e7f58b7fdd69b5f12ccb85e8a7c704318d))
+- **ci:** switch package publishing from github packages to npmjs ([7bbda65](https://github.com/icoretech/warden-mcp/commit/7bbda656f4141deb3eaf0252fc46efe40ee550d8))
+- **docker:** use release-please version outputs for image tags ([0c2b6a9](https://github.com/icoretech/warden-mcp/commit/0c2b6a93ad332bb458028c4b3ea99583bca42d9f))
+- drop component prefix from release tags ([f2000b1](https://github.com/icoretech/warden-mcp/commit/f2000b1a3de4bdb25e51de5b68d572752570c173))
+- **package:** add npm keywords ([3603fc2](https://github.com/icoretech/warden-mcp/commit/3603fc24ccf8d569c2c8967db9e039cf9931e4cf))
+- **renovate:** keep config PRs lint-clean ([e510d94](https://github.com/icoretech/warden-mcp/commit/e510d94c6e97df7946808710d3363e6ebb4166db))
+- resolve noAsyncPromiseExecutor lint error in stdio transport ([fdde3eb](https://github.com/icoretech/warden-mcp/commit/fdde3eb861c281562f1bf7e1a92fa33a1f998434))
+- **ux:** clarify stdio credential requirements ([1dd8273](https://github.com/icoretech/warden-mcp/commit/1dd8273f44acd8dea9c8d553c5913a5d7a7ac9ae))
 
 ## [0.1.4](https://github.com/icoretech/warden-mcp/compare/warden-mcp-v0.1.3...warden-mcp-v0.1.4) (2026-03-21)
 
-
 ### Bug Fixes
 
-* **docker:** use release-please version outputs for image tags ([0c2b6a9](https://github.com/icoretech/warden-mcp/commit/0c2b6a93ad332bb458028c4b3ea99583bca42d9f))
+- **docker:** use release-please version outputs for image tags ([0c2b6a9](https://github.com/icoretech/warden-mcp/commit/0c2b6a93ad332bb458028c4b3ea99583bca42d9f))
 
 ## [0.1.3](https://github.com/icoretech/warden-mcp/compare/warden-mcp-v0.1.2...warden-mcp-v0.1.3) (2026-03-21)
 
-
 ### Features
 
-* **docker:** publish multi-arch image to ghcr.io ([2c2f8c7](https://github.com/icoretech/warden-mcp/commit/2c2f8c7c627ae3efaca506d7a56e80b327de0827))
+- **docker:** publish multi-arch image to ghcr.io ([2c2f8c7](https://github.com/icoretech/warden-mcp/commit/2c2f8c7c627ae3efaca506d7a56e80b327de0827))
 
 ## [0.1.2](https://github.com/icoretech/warden-mcp/compare/warden-mcp-v0.1.1...warden-mcp-v0.1.2) (2026-03-21)
 
-
 ### Bug Fixes
 
-* **biome:** ignore package.json formatting ([1d916f4](https://github.com/icoretech/warden-mcp/commit/1d916f4d2d3159cc1d1b327a8266d9a935c2bf5c))
-* **biome:** ignore release-managed json formatting ([7dbf5e8](https://github.com/icoretech/warden-mcp/commit/7dbf5e85170d9fccd40d60810a25a0e2afad4792))
-* **biome:** use package.json expand override ([1eb7a2c](https://github.com/icoretech/warden-mcp/commit/1eb7a2c6345a6b536fc783ca76a7bea54fc1234d))
-* **renovate:** keep config PRs lint-clean ([e510d94](https://github.com/icoretech/warden-mcp/commit/e510d94c6e97df7946808710d3363e6ebb4166db))
+- **biome:** ignore package.json formatting ([1d916f4](https://github.com/icoretech/warden-mcp/commit/1d916f4d2d3159cc1d1b327a8266d9a935c2bf5c))
+- **biome:** ignore release-managed json formatting ([7dbf5e8](https://github.com/icoretech/warden-mcp/commit/7dbf5e85170d9fccd40d60810a25a0e2afad4792))
+- **biome:** use package.json expand override ([1eb7a2c](https://github.com/icoretech/warden-mcp/commit/1eb7a2c6345a6b536fc783ca76a7bea54fc1234d))
+- **renovate:** keep config PRs lint-clean ([e510d94](https://github.com/icoretech/warden-mcp/commit/e510d94c6e97df7946808710d3363e6ebb4166db))
 
 ## [0.1.1](https://github.com/icoretech/warden-mcp/compare/warden-mcp-v0.1.0...warden-mcp-v0.1.1) (2026-03-21)
 
-
 ### Features
 
-* add --stdio flag and WARDEN_MCP_STDIO env var to server entry ([2a6b49e](https://github.com/icoretech/warden-mcp/commit/2a6b49e87504e7a85e1f1295029c230fe786baab))
-* add bin/warden-mcp.js CLI entry with @bitwarden/cli resolution ([244d372](https://github.com/icoretech/warden-mcp/commit/244d372284b60a0d4f29ae38f72a6a6897108f6e))
-* add env var fallback to bwEnvFromHeadersOrEnv ([0a7c6f3](https://github.com/icoretech/warden-mcp/commit/0a7c6f392b9c7e26945ab3b175df2d5976ef163b))
-* add stdio transport ([9ecc99c](https://github.com/icoretech/warden-mcp/commit/9ecc99c54ddec29265aa19bd79f8d31b235a0a22))
+- add --stdio flag and WARDEN_MCP_STDIO env var to server entry ([2a6b49e](https://github.com/icoretech/warden-mcp/commit/2a6b49e87504e7a85e1f1295029c230fe786baab))
+- add bin/warden-mcp.js CLI entry with @bitwarden/cli resolution ([244d372](https://github.com/icoretech/warden-mcp/commit/244d372284b60a0d4f29ae38f72a6a6897108f6e))
+- add env var fallback to bwEnvFromHeadersOrEnv ([0a7c6f3](https://github.com/icoretech/warden-mcp/commit/0a7c6f392b9c7e26945ab3b175df2d5976ef163b))
+- add stdio transport ([9ecc99c](https://github.com/icoretech/warden-mcp/commit/9ecc99c54ddec29265aa19bd79f8d31b235a0a22))
 
 
 ### Bug Fixes
 
-* add explicit private:false, add headers-priority test ([ef9d5a1](https://github.com/icoretech/warden-mcp/commit/ef9d5a1981ddf74d8538bbadd0c149b906eaf074))
-* **ci:** enable npm trusted publishing ([9a8f2af](https://github.com/icoretech/warden-mcp/commit/9a8f2afa0b50bc69567195e89e65b03d7c66d019))
-* **ci:** replace non-existent rhysd/actionlint-action with docker image ([01baeaa](https://github.com/icoretech/warden-mcp/commit/01baeaa2486265b0427c931c6986b1284363fcbc))
-* **ci:** suppress shellcheck SC2034 in session-flood-guardrail workflow ([8bde88e](https://github.com/icoretech/warden-mcp/commit/8bde88e7f58b7fdd69b5f12ccb85e8a7c704318d))
-* **ci:** switch package publishing from github packages to npmjs ([7bbda65](https://github.com/icoretech/warden-mcp/commit/7bbda656f4141deb3eaf0252fc46efe40ee550d8))
-* **package:** add npm keywords ([3603fc2](https://github.com/icoretech/warden-mcp/commit/3603fc24ccf8d569c2c8967db9e039cf9931e4cf))
-* resolve noAsyncPromiseExecutor lint error in stdio transport ([fdde3eb](https://github.com/icoretech/warden-mcp/commit/fdde3eb861c281562f1bf7e1a92fa33a1f998434))
-* **ux:** clarify stdio credential requirements ([1dd8273](https://github.com/icoretech/warden-mcp/commit/1dd8273f44acd8dea9c8d553c5913a5d7a7ac9ae))
+- add explicit private:false, add headers-priority test ([ef9d5a1](https://github.com/icoretech/warden-mcp/commit/ef9d5a1981ddf74d8538bbadd0c149b906eaf074))
+- **ci:** enable npm trusted publishing ([9a8f2af](https://github.com/icoretech/warden-mcp/commit/9a8f2afa0b50bc69567195e89e65b03d7c66d019))
+- **ci:** replace non-existent rhysd/actionlint-action with docker image ([01baeaa](https://github.com/icoretech/warden-mcp/commit/01baeaa2486265b0427c931c6986b1284363fcbc))
+- **ci:** suppress shellcheck SC2034 in session-flood-guardrail workflow ([8bde88e](https://github.com/icoretech/warden-mcp/commit/8bde88e7f58b7fdd69b5f12ccb85e8a7c704318d))
+- **ci:** switch package publishing from github packages to npmjs ([7bbda65](https://github.com/icoretech/warden-mcp/commit/7bbda656f4141deb3eaf0252fc46efe40ee550d8))
+- **package:** add npm keywords ([3603fc2](https://github.com/icoretech/warden-mcp/commit/3603fc24ccf8d569c2c8967db9e039cf9931e4cf))
+- resolve noAsyncPromiseExecutor lint error in stdio transport ([fdde3eb](https://github.com/icoretech/warden-mcp/commit/fdde3eb861c281562f1bf7e1a92fa33a1f998434))
+- **ux:** clarify stdio credential requirements ([1dd8273](https://github.com/icoretech/warden-mcp/commit/1dd8273f44acd8dea9c8d553c5913a5d7a7ac9ae))
 
 ## Changelog
