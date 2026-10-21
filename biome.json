@@ -6,6 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
+    "includes": ["**", "!CHANGELOG.md"],
     "ignoreUnknown": false
   },
   "formatter": {
@@ -55,12 +56,6 @@
     }
   },
   "overrides": [
-    {
-      "includes": ["CHANGELOG.md"],
-      "formatter": {
-        "enabled": false
-      }
-    },
     {
       "includes": ["package.json"],
       "formatter": {
