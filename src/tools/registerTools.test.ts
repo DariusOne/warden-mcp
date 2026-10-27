@@ -933,6 +933,8 @@ describe('registerTools: read-only tools in readonly mode', {
   test('encode tool is not blocked by READONLY', async () => {
     const { client, cleanup } = await startTestServer({
       READONLY: 'true',
+      // Keep this policy test independent of installed CLI/network availability.
+      BW_BIN: '/warden-unit-test-missing-bw',
       // No BW headers needed — encode doesn't need them if we set
       // env vars.  But we can't actually call bw, so we just verify
       // it doesn't return READONLY error.
