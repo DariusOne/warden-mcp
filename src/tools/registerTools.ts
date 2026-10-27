@@ -41,6 +41,21 @@ export function registerTools(server: McpServer, deps: RegisterToolsDeps) {
       return undefined;
     }
 
+    // These operations can return opaque bytes, Send keys or text. Fail closed
+    // before reading content, including direct calls and structured-text mode.
+    const suffix = name.slice(legacyPrefix.length);
+    if (
+      isNoReveal &&
+      (suffix === 'get_attachment' ||
+        suffix === 'receive' ||
+        suffix.startsWith('send_'))
+    ) {
+      return rawRegisterTool(publicName, args[0], async () => ({
+        isError: true,
+        content: [{ type: 'text', text: 'Blocked: NOREVEAL=true' }],
+      }));
+    }
+
     return rawRegisterTool(publicName, ...args);
   }) as McpServer['registerTool'];
 
