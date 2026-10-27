@@ -1,5 +1,8 @@
 # warden-mcp
 
+
+This fork provides an opt-in Windows stdio credential-use mode. See [AGENT_SAFE.md](AGENT_SAFE.md) for its twelve-tool interface, deployment and security boundaries. Upstream HTTP behavior remains available outside `--agent-safe`.
+
 **Vaultwarden / Bitwarden MCP server for credential-aware AI agents.**
 
 [![npm version](https://img.shields.io/npm/v/%40icoretech%2Fwarden-mcp?logo=npm)](https://www.npmjs.com/package/@icoretech/warden-mcp)

@@ -1,0 +1,6 @@
+{
+  "server": "https://vault.example.invalid:8443/bitwarden",
+  "bw": "C:\\PrivateRuntime\\runtime\\bw.exe",
+  "python": "C:\\PrivateRuntime\\.venv\\Scripts\\python.exe",
+  "worker": "C:\\PrivateRuntime\\versions\\agent-v0.1.0\\agent_worker\\worker.py"
+}

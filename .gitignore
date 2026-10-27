@@ -18,3 +18,17 @@ scripts/*
 scorecard.png
 .sisyphus/
 .omo/
+
+# Agent runtime and fixture material never belongs in Git.
+.agent-runtime/
+agent_tests/.runs/
+__pycache__/
+*.pyc
+*.dpapi
+*.pem
+*.key
+config.json
+access.json
+state/
+logs/
+backups/
