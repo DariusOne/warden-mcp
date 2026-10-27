@@ -23,7 +23,12 @@ export class BwSessionAuth {
       env.login.method === 'apikey'
         ? `apikey:${env.login.clientId}`
         : `userpass:${env.login.user}`;
-    this.storage = new BwSessionStorage(homeDir, env.host, identity);
+    this.storage = new BwSessionStorage(
+      homeDir,
+      env.host,
+      identity,
+      env.persistSession,
+    );
   }
 
   hasSession(): boolean {
@@ -65,6 +70,7 @@ export class BwSessionAuth {
         throw new Error('bw login/unlock returned an empty session');
       }
       this.session = session;
+      this.env.onSecret?.(session);
       await this.storage.writeSession(session);
       return session;
     });
@@ -86,10 +92,10 @@ export class BwSessionAuth {
 
   async isSessionValid(session: string): Promise<boolean> {
     try {
-      const { stdout } = await runBw(
-        ['--session', session, 'unlock', '--check'],
-        { env: this.storage.baseEnv(), timeoutMs: 30_000 },
-      );
+      const { stdout } = await runBw(['unlock', '--check'], {
+        env: this.storage.baseEnv({ BW_SESSION: session }),
+        timeoutMs: 30_000,
+      });
       void stdout;
       return true;
     } catch {
@@ -99,11 +105,12 @@ export class BwSessionAuth {
 
   private async tryUnlock(): Promise<string> {
     try {
+      const credentials = await this.credentials();
       const { stdout } = await runBw(
         ['unlock', '--passwordenv', 'BW_PASSWORD', '--raw'],
         {
           env: this.storage.baseEnv({
-            BW_PASSWORD: this.env.password,
+            BW_PASSWORD: credentials.password,
             BW_HOST: this.env.host,
           }),
           timeoutMs: 60_000,
@@ -121,11 +128,12 @@ export class BwSessionAuth {
     readonly session: string;
   }> {
     try {
-      if (this.env.login.method === 'apikey') {
+      const credentials = await this.credentials();
+      if (credentials.login.method === 'apikey') {
         const { stdout } = await runBw(['login', '--apikey', '--raw'], {
           env: this.storage.baseEnv({
-            BW_CLIENTID: this.env.login.clientId,
-            BW_CLIENTSECRET: this.env.login.clientSecret,
+            BW_CLIENTID: credentials.login.clientId,
+            BW_CLIENTSECRET: credentials.login.clientSecret,
             BW_HOST: this.env.host,
           }),
           timeoutMs: 60_000,
@@ -135,10 +143,16 @@ export class BwSessionAuth {
       }
 
       const { stdout } = await runBw(
-        ['login', this.env.login.user, '--passwordenv', 'BW_PASSWORD', '--raw'],
+        [
+          'login',
+          credentials.login.user,
+          '--passwordenv',
+          'BW_PASSWORD',
+          '--raw',
+        ],
         {
           env: this.storage.baseEnv({
-            BW_PASSWORD: this.env.password,
+            BW_PASSWORD: credentials.password,
             BW_HOST: this.env.host,
           }),
           timeoutMs: 60_000,
@@ -221,6 +235,25 @@ export class BwSessionAuth {
       timeoutMs: 30_000,
     });
     this.configuredHost = this.env.host;
+  }
+
+  async revoke(): Promise<void> {
+    this.clearInMemorySession();
+    await this.storage.clearSession();
+    await runBw(['lock'], {
+      env: this.storage.baseEnv(),
+      timeoutMs: 10_000,
+    }).catch(() => {});
+  }
+
+  private async credentials(): Promise<Pick<BwEnv, 'password' | 'login'>> {
+    const value = this.env.credentialProvider
+      ? await this.env.credentialProvider()
+      : this.env;
+    this.env.onSecret?.(value.password);
+    if (value.login.method === 'apikey')
+      this.env.onSecret?.(value.login.clientSecret);
+    return value;
   }
 
   private clearInMemorySession(): void {

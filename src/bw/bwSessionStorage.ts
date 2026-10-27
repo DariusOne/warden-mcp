@@ -73,6 +73,7 @@ export class BwSessionStorage {
     homeDir: string,
     private readonly host: string,
     private readonly identity: string,
+    private readonly persistSession = true,
   ) {
     this.homeDir = homeDir;
     this.appDataDir = join(homeDir, '.bitwarden-cli');
@@ -113,6 +114,7 @@ export class BwSessionStorage {
   }
 
   async readSession(): Promise<string | null> {
+    if (!this.persistSession) return null;
     try {
       await chmod(this.sessionStatePath, 0o600);
       const raw = await readFile(this.sessionStatePath, 'utf8');
@@ -133,6 +135,7 @@ export class BwSessionStorage {
   }
 
   async writeSession(session: string): Promise<void> {
+    if (!this.persistSession) return;
     const now = new Date().toISOString();
     const state: StoredSessionState = {
       version: 1,

@@ -21,6 +21,7 @@ export class BwSessionManager {
   }
 
   startKeepUnlocked(): void {
+    if (this.env.persistSession === false) return;
     if (this.keepaliveTimer) return;
     const intervalMs = Math.max(10, this.env.unlockIntervalSeconds) * 1000;
     this.keepaliveTimer = setInterval(() => {
@@ -117,18 +118,18 @@ export class BwSessionManager {
     args: string[],
     opts: BwRunOptions = {},
   ): Promise<BwRunResult> {
-    return runBw(['--session', session, ...args], {
+    return runBw(args, {
       ...opts,
-      env: this.auth.storage.baseEnv(opts.env),
+      env: this.auth.storage.baseEnv({ ...opts.env, BW_SESSION: session }),
     });
   }
 
   private async getTemplateItemLocked(session: string): Promise<unknown> {
     if (this.templateItem) return this.templateItem;
-    const { stdout } = await runBw(
-      ['--session', session, 'get', 'template', 'item'],
-      { env: this.auth.storage.baseEnv(), timeoutMs: 60_000 },
-    );
+    const { stdout } = await runBw(['get', 'template', 'item'], {
+      env: this.auth.storage.baseEnv({ BW_SESSION: session }),
+      timeoutMs: 60_000,
+    });
     try {
       this.templateItem = JSON.parse(stdout);
       return this.templateItem;
@@ -141,11 +142,18 @@ export class BwSessionManager {
   }
 
   private startBackgroundUnlock(): void {
+    if (this.env.persistSession === false) return;
     if (this.auth.hasSession() || this.warmupPromise) return;
     this.warmupPromise = this.withSession(async () => undefined)
       .catch(() => {})
       .finally(() => {
         this.warmupPromise = null;
       });
+  }
+
+  async revoke(): Promise<void> {
+    if (this.keepaliveTimer) clearInterval(this.keepaliveTimer);
+    this.keepaliveTimer = null;
+    await this.lock.runExclusive(() => this.auth.revoke());
   }
 }

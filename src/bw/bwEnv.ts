@@ -10,6 +10,12 @@ export interface BwEnv {
       }
     | { readonly method: 'userpass'; readonly user: string };
   readonly homeDir?: string;
+  /** Private provider: called only when login/unlock needs credentials. */
+  readonly credentialProvider?: () => Promise<
+    Pick<BwEnv, 'password' | 'login'>
+  >;
+  readonly persistSession?: boolean;
+  readonly onSecret?: (value: string) => void;
 }
 
 function requiredEnv(name: string): string {

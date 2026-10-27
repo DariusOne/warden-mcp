@@ -1,6 +1,7 @@
 // src/bw/bwCli.ts
 
 import { spawn } from 'node:child_process';
+import { childEnvironment } from '../agent-safe/privateWorker.js';
 import { renderSafeBwCommand } from './bwCommandDisplay.js';
 import { resolveBundledBwBin } from './resolveBwBin.js';
 
@@ -109,8 +110,13 @@ export async function runBw(
     injectNoInteraction && !args.includes('--nointeraction')
       ? ['--nointeraction', ...args]
       : args;
-  const env: NodeJS.ProcessEnv = { ...process.env, ...(opts.env ?? {}) };
+  const safeMode = process.env.WARDEN_AGENT_SAFE_PROCESS === '1';
+  const env: NodeJS.ProcessEnv = {
+    ...(safeMode ? childEnvironment() : process.env),
+    ...(opts.env ?? {}),
+  };
   const debug =
+    !safeMode &&
     (process.env.KEYCHAIN_DEBUG_BW ?? 'false').toLowerCase() === 'true';
   const startedAt = Date.now();
 
@@ -123,6 +129,7 @@ export async function runBw(
     env,
     stdio: ['pipe', 'pipe', 'pipe'],
     detached,
+    windowsHide: true,
   });
 
   const stdoutChunks: Buffer[] = [];
