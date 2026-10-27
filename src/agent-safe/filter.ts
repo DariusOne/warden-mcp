@@ -7,6 +7,34 @@ export function record(value: unknown): Record<string, unknown> {
 }
 
 const digest = (s: string) => createHash('sha256').update(s).digest('hex');
+function isConnectionField(field: Record<string, unknown>): boolean {
+  if ((field.type ?? 0) !== 0 || typeof field.value !== 'string') return false;
+  const name = String(field.name ?? '')
+    .trim()
+    .toLocaleLowerCase();
+  const value = field.value.trim();
+  if (['port', '端口', 'ssh端口', 'mysql端口'].includes(name))
+    return (
+      /^\d{1,5}$/.test(value) && Number(value) > 0 && Number(value) <= 65535
+    );
+  if (
+    [
+      'host',
+      'hostname',
+      'ip',
+      'server',
+      '主机',
+      '服务器',
+      '服务器ip',
+      'ip地址',
+      '地址',
+    ].includes(name)
+  )
+    return /^[A-Za-z0-9._:\-[\]]{1,255}$/.test(value);
+  if (['database', 'dbname', '数据库', '数据库名'].includes(name))
+    return /^[A-Za-z0-9_$.-]{1,64}$/.test(value);
+  return false;
+}
 const rolling = (s: string) => {
   let h = 0;
   for (let i = 0; i < s.length; i++)
@@ -120,8 +148,11 @@ export class SecretFilter {
       item.notes,
       record(item.sshKey).privateKey,
     );
-    for (const f of Array.isArray(item.fields) ? item.fields : [])
-      this.add(record(f).value);
+    for (const f of Array.isArray(item.fields) ? item.fields : []) {
+      // Routing metadata is not a secret. Registering a port such as "22"
+      // would corrupt unrelated UUIDs and make valid entries unusable.
+      if (!isConnectionField(record(f))) this.add(record(f).value);
+    }
     for (const h of Array.isArray(item.passwordHistory)
       ? item.passwordHistory
       : [])

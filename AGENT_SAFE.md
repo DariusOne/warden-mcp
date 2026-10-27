@@ -86,6 +86,11 @@ URL, JSON, hex and HTML encodings are checked in text, structures and keys.
 Raw exceptions and child stderr are not forwarded. Audit logs contain only
 time, action, outcome and a validated item ID.
 
+Recognized, validated host/port/database routing fields are nonsecret connection
+metadata and are not added as secret fingerprints; their raw custom fields are
+still omitted from search. This prevents a port such as `22` from corrupting
+stable item IDs. All other ordinary custom fields remain filtered by default.
+
 This controls normal tool use and known-secret outputs. It does **not** isolate
 credentials from programs with full rights as the same Windows user, guarantee
 memory zeroization in garbage-collected runtimes, or recognize every arbitrary

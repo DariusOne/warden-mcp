@@ -73,3 +73,25 @@ test('overlapping secrets and short secrets do not expose suffixes', () => {
   f.add('abc', 'cdef');
   assert.equal(f.text('xabcdefy'), 'x[REDACTED]y');
 });
+
+test('nonsecret routing fields never corrupt stable IDs or allowed origins', () => {
+  const item = {
+    id: '11223344-2222-3333-4444-555555555555',
+    name: 'SSH',
+    type: 1,
+    fields: [
+      { name: 'port', value: '22', type: 0 },
+      { name: 'host', value: 'example.invalid', type: 0 },
+      { name: 'ordinary', value: 'keep-hidden', type: 0 },
+    ],
+    login: {
+      password: 'native-secret',
+      uris: [{ uri: 'https://example.invalid/' }],
+    },
+  };
+  const f = new SecretFilter();
+  f.item(item);
+  const result = f.clean(metadata(item));
+  assert.deepEqual(result, metadata(item));
+  assert.equal(f.text('keep-hidden native-secret'), '[REDACTED] [REDACTED]');
+});
