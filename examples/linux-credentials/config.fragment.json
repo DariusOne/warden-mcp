@@ -1,0 +1,4 @@
+{
+  "server": "https://vault.example.invalid/bitwarden",
+  "credential_socket": "/run/warden-hermes-credentials/credentials.sock"
+}

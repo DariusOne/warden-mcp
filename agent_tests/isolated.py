@@ -23,6 +23,7 @@ import time
 import urllib.request
 import uuid
 from datetime import datetime, timedelta, timezone
+from harness_helpers import docker_command, SyntheticCredentials, write_private, isolated_environment
 
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes, padding, serialization
@@ -34,7 +35,7 @@ REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / 'agent_tests' / '.runs'
 ROOT.mkdir(exist_ok=True)
 services = None
-DOCKER = r'C:\Program Files\Docker\Docker\resources\bin\docker.exe'
+DOCKER = os.environ.get('WARDEN_TEST_DOCKER') or (r'C:\Program Files\Docker\Docker\resources\bin\docker.exe' if sys.platform == 'win32' else shutil.which('docker'))
 NODE = os.environ['WARDEN_TEST_NODE']
 BW = os.environ['WARDEN_TEST_BW']
 IMAGE = 'vaultwarden/server@sha256:2bb2e0344616c62a6d76ea10558497499f8ed3f731400e143dc7bf17b757b5b9'
@@ -60,6 +61,8 @@ STAGE = 'initialization'
 TLS_CONTEXT = None
 PROXY = None
 PROXY_THREAD = None
+CREDENTIALS = None
+credential_dir = None
 
 
 def safe(text):
@@ -79,7 +82,7 @@ def run(args, *, env=None, data=None, timeout=120):
 
 
 def docker(*args):
-    return run([DOCKER, '--context', 'desktop-linux', *args])
+    return run([*docker_command(DOCKER), *args])
 
 
 def post(url, body):
@@ -139,9 +142,9 @@ def start_tls_proxy(upstream_port):
     ca_path = FIXTURES / 'test-ca.pem'
     cert_path = FIXTURES / 'test-server.pem'
     key_path = FIXTURES / 'test-server-key.pem'
-    ca_path.write_bytes(ca.public_bytes(serialization.Encoding.PEM))
-    cert_path.write_bytes(leaf.public_bytes(serialization.Encoding.PEM))
-    key_path.write_bytes(leaf_key.private_bytes(serialization.Encoding.PEM,
+    write_private(ca_path, ca.public_bytes(serialization.Encoding.PEM))
+    write_private(cert_path, leaf.public_bytes(serialization.Encoding.PEM))
+    write_private(key_path, leaf_key.private_bytes(serialization.Encoding.PEM,
                                               serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
     TLS_CONTEXT = ssl.create_default_context(cafile=str(ca_path))
 
@@ -182,11 +185,10 @@ def start_tls_proxy(upstream_port):
 
 
 try:
-    PROFILE.mkdir()
-    FIXTURES.mkdir()
-    (FIXTURES / "state").mkdir()
-    env = {k: v for k, v in os.environ.items()
-           if not k.upper().startswith(('BW_', 'BITWARDEN'))}
+    PROFILE.mkdir(mode=0o700)
+    FIXTURES.mkdir(mode=0o700)
+    (FIXTURES / "state").mkdir(mode=0o700)
+    env = isolated_environment(os.environ)
     env['BITWARDENCLI_APPDATA_DIR'] = str(PROFILE)
     env['NO_PROXY'] = '127.0.0.1,localhost'
     env['no_proxy'] = env['NO_PROXY']
@@ -268,8 +270,8 @@ try:
         'send': 'send-' + secrets.token_urlsafe(20),
     }
     REDACTIONS.extend(markers.values())
-    seed = {'type': 1, 'name': 'Synthetic audit seeded entry', 'notes': markers['notes'],
-            'login': {'username': 'synthetic-user', 'password': markers['password'], 'totp': markers['totp'],
+    seed = {'type': 1, 'name': 'Synthetic audit ' + markers['hidden'] + ' ' + base64.b64encode(markers['password'].encode()).decode(), 'notes': markers['notes'],
+            'login': {'username': 'synthetic-user-' + markers['ordinary'], 'password': markers['password'], 'totp': markers['totp'],
                       'uris': [{'uri': 'https://example.invalid/login?token=' + markers['uri_token'], 'match': None}]},
             'fields': [{'name': 'Synthetic hidden value', 'value': markers['hidden'], 'type': 1},
                        {'name': 'password', 'value': markers['ordinary'], 'type': 0},
@@ -278,7 +280,7 @@ try:
     created = json.loads(run([BW, 'create', 'item', payload], env=env))
     RESULT['checks']['cli_seed_entry'] = bool(created.get('id'))
     upload = FIXTURES / 'synthetic-attachment.txt'
-    upload.write_text(markers['attachment'], encoding='utf-8')
+    write_private(upload, markers['attachment'])
     download = FIXTURES / 'download'
     download.mkdir()
     STAGE = 'seed-synthetic-attachment-and-send'
@@ -296,17 +298,30 @@ try:
         encoded = base64.b64encode(json.dumps(new_item).encode()).decode()
         ids[kind] = json.loads(run([BW, 'create', 'item', encoded], env=env))['id']
     sys.path.insert(0,str(REPO / 'agent_worker'))
-    from bridge_core import dpapi
     auth = {'email':email,'master':master,'server':base,'client_id':'','client_secret':''}
-    (FIXTURES/'state/auth.dpapi').write_bytes(dpapi(json.dumps(auth).encode()))
     cfg = {'server':base,'bw':BW,'python':sys.executable,'worker':str(REPO/'agent_tests/fixture_worker.py')}
-    (FIXTURES/'config.json').write_text(json.dumps(cfg),encoding='utf-8')
-    (FIXTURES/'access.json').write_text(json.dumps({'enabled':True,'allow_all':True,'items':[]}),encoding='utf-8')
-    proc = subprocess.run([NODE,str(REPO/'agent_tests/client.mjs')],input=json.dumps({'root':str(FIXTURES),'base':base,'bw':BW,'email':email,'master':master,'itemId':created['id'],'ids':ids,'markers':markers,'attachmentId':attachment_id,'sendId':send['id']}),capture_output=True,text=True,encoding='utf-8',errors='replace',env=env,timeout=900)
+    if sys.platform == 'win32':
+        from bridge_core import dpapi
+        write_private(FIXTURES/'state/auth.dpapi', dpapi(json.dumps(auth).encode()))
+        RESULT['credential_fixture'] = 'Windows DPAPI'
+    else:
+        import tempfile
+        credential_dir = Path(tempfile.mkdtemp(prefix='wcred-', dir=os.environ.get('TMPDIR')))
+        credential_dir.chmod(0o700)
+        cfg['credential_socket'] = str(credential_dir/'c.sock')
+        cfg['browser_executable'] = os.environ['WARDEN_TEST_BROWSER']
+        CREDENTIALS = SyntheticCredentials(cfg['credential_socket'], auth)
+        CREDENTIALS.__enter__()
+        RESULT['credential_fixture'] = 'test-only same-UID in-memory UNIX socket'
+        RESULT['root_encrypted_service_validation'] = 'not covered by this synthetic fixture'
+    write_private(FIXTURES/'config.json', json.dumps(cfg))
+    write_private(FIXTURES/'access.json', json.dumps({'enabled':True,'allow_all':True,'items':[]}))
+    client_env = isolated_environment(env)
+    proc = subprocess.run([NODE,str(REPO/'agent_tests/client.mjs')],input=json.dumps({'root':str(FIXTURES),'base':base,'bw':BW,'python':sys.executable,'email':email,'master':master,'itemId':created['id'],'ids':ids,'markers':markers,'attachmentId':attachment_id,'sendId':send['id'],'webUrl':services.web_url}),capture_output=True,text=True,encoding='utf-8',errors='replace',env=client_env,timeout=900)
     if proc.returncode:
         raise RuntimeError('Protocol harness failed (details suppressed)')
     RESULT['mcp'] = json.loads(proc.stdout)
-    RESULT['checks']['web_received_correct_password_and_totp'] = bool(services.web_received and all(x['password_ok'] and x['totp_present'] for x in services.web_received))
+    RESULT['checks']['web_received_correct_password_and_totp'] = bool(services.web_received and all(x['password_ok'] and x['totp_valid'] for x in services.web_received))
     if not RESULT['mcp'].get('completed') or not RESULT['checks']['web_received_correct_password_and_totp']:
         raise RuntimeError('Protocol validation incomplete')
     RESULT['completed'] = True
@@ -315,7 +330,20 @@ except Exception as exc:
     RESULT['failure_stage'] = STAGE
     RESULT['error'] = safe(str(exc))
 finally:
-    if services is not None: services.close()
+    if services is not None:
+        try:
+            services.close()
+            RESULT['temporary_service_fixtures_stopped'] = True
+        except Exception as exc:
+            RESULT['temporary_service_fixtures_stopped'] = False
+            RESULT['cleanup_error'] = safe(str(exc))
+    if CREDENTIALS is not None:
+        try:
+            CREDENTIALS.__exit__()
+            if credential_dir is not None: credential_dir.rmdir()
+            RESULT['temporary_credential_fixture_stopped'] = True
+        except Exception as exc:
+            RESULT['cleanup_error'] = safe(str(exc))
     if PROXY is not None:
         PROXY.shutdown()
         PROXY.server_close()
@@ -329,6 +357,8 @@ finally:
             if found != NAME:
                 raise RuntimeError('Unexpected container cleanup identity')
             docker('rm', '-f', NAME)
+        if docker('ps', '-a', '--filter', 'name=^/' + NAME + '$', '--filter', 'label=' + LABEL, '--format', '{{.Names}}'):
+            raise RuntimeError('Isolated container still present after removal')
         RESULT['temporary_container_removed'] = True
     except Exception as exc:
         RESULT['temporary_container_removed'] = False
@@ -340,7 +370,7 @@ finally:
             RESULT['cleanup_error'] = safe(str(exc))
     RESULT['temporary_cli_profile_removed'] = not PROFILE.exists()
     RESULT['finished_utc'] = datetime.now(timezone.utc).isoformat()
-    (ROOT / 'audit-results.json').write_text(json.dumps(RESULT, ensure_ascii=False, indent=2), encoding='utf-8')
+    write_private(ROOT / 'audit-results.json', json.dumps(RESULT, ensure_ascii=False, indent=2))
     print(json.dumps(RESULT, ensure_ascii=False, indent=2))
 
-sys.exit(0 if RESULT.get('completed') and RESULT.get('temporary_container_removed') else 1)
+sys.exit(0 if RESULT.get('completed') and RESULT.get('temporary_container_removed') and not RESULT.get('cleanup_error') else 1)

@@ -1,10 +1,17 @@
 """A dedicated browser thread: MCP never receives secrets or browser cookies."""
 from __future__ import annotations
 import concurrent.futures
+import json
+import os
+from pathlib import Path
+import sys
 import queue
+import re
+import shutil
 import threading
 import uuid
 from urllib.parse import urlsplit
+from job import browser_profile_directory
 from bridge_core import BridgeError, check_browser_target, origin, urls_of
 
 
@@ -16,6 +23,15 @@ class BrowserWorker:
         self.thread = None
         self.pages = {}
         self.browser = None
+        self.profiles = {}
+        self.profile_dirs = {}
+    def remove_profile(self, profile):
+        # Pin the parent when the profile is created. Absolute-path rmtree
+        # would follow a later replacement of an ancestor directory.
+        parent_fd = self.profile_dirs[profile]
+        shutil.rmtree(profile.name, dir_fd=parent_fd)
+        os.close(parent_fd)
+        del self.profile_dirs[profile]
     def call(self, operation, **kwargs):
         if not self.thread or not self.thread.is_alive():
             self.thread = threading.Thread(target=self._loop, daemon=True, name="vaultwarden-browser")
@@ -64,10 +80,59 @@ class BrowserWorker:
         if not url:
             url = next((u for u in urls_of(item) if u.startswith("https://")), "")
         allowed = check_browser_target(item, url)
-        if not self.browser:
-            self.browser = self.pw.chromium.launch(channel="msedge", headless=self.test_options.get("headless", False), args=self.test_options.get("launch_args", []))
-        context = self.browser.new_context(service_workers="block", accept_downloads=False,
-                                          ignore_https_errors=False)
+        launch_args = self.test_options.get('launch_args', [])
+        # Test fixtures may pin one ephemeral certificate, not weaken sandbox,
+        # reuse a profile, enable a listener, or disable TLS verification.
+        if not isinstance(launch_args, list) or any(
+            not isinstance(arg, str) or not re.fullmatch(r'--ignore-certificate-errors-spki-list=[A-Za-z0-9+/]{43}=', arg)
+            for arg in launch_args
+        ):
+            raise BridgeError('browser_config', 'Unsafe browser launch options')
+        if sys.platform == 'linux':
+            try:
+                config = json.loads((Path(self.broker.root) / 'config.json').read_text(encoding='utf-8-sig'))
+                executable = config['browser_executable']
+                if not isinstance(executable, str) or not Path(executable).is_absolute():
+                    raise ValueError()
+                path = Path(executable)
+                if str(path.resolve(strict=True)) != executable or not path.is_file() or not os.access(path, os.X_OK):
+                    raise ValueError()
+                if path.stat().st_mode & 0o022:
+                    raise ValueError()
+            except (KeyError, TypeError, ValueError, OSError):
+                raise BridgeError('browser_config', 'Dedicated Chromium executable required') from None
+            try:
+                directory = browser_profile_directory(self.broker.root)
+            except (ValueError, OSError):
+                raise BridgeError('browser_config', 'Private runtime browser directory required') from None
+            parent_fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            try:
+                profile = directory / ('session-' + uuid.uuid4().hex)
+                os.mkdir(profile.name, mode=0o700, dir_fd=parent_fd)
+            except BaseException:
+                os.close(parent_fd)
+                raise
+            self.profile_dirs[profile] = parent_fd
+            try:
+                context = self.pw.chromium.launch_persistent_context(
+                    user_data_dir=str(profile), executable_path=executable,
+                    chromium_sandbox=True, headless=self.test_options.get('headless', True),
+                    env={**os.environ, 'HOME': str(profile), 'XDG_CONFIG_HOME': str(profile),
+                         'XDG_CACHE_HOME': str(profile)},
+                    # Leave TMPDIR unchanged: Chromium's AF_UNIX singleton
+                    # sockets fail for deep profile paths (108-byte limit).
+                    args=launch_args, service_workers='block',
+                    accept_downloads=False, ignore_https_errors=False)
+            except Exception:
+                self.remove_profile(profile)
+                raise
+            self.profiles[context] = profile
+        else:
+            if not self.browser:
+                self.browser = self.pw.chromium.launch(channel="msedge", chromium_sandbox=True,
+                    headless=self.test_options.get("headless", False), args=launch_args)
+            context = self.browser.new_context(service_workers="block", accept_downloads=False,
+                                              ignore_https_errors=False)
         blocked = []
         def route(request_route):
             try:
@@ -170,6 +235,10 @@ class BrowserWorker:
         e["refs"] = {}
         return {"performed": action, "page_id": page_id, "next": "调用 browser_state 获取最新页面"}
     def do_close_all(self):
+        for context, profile in list(self.profiles.items()):
+            context.close()
+            self.remove_profile(profile)
+            del self.profiles[context]
         if self.browser:
             self.browser.close()
         self.browser = None

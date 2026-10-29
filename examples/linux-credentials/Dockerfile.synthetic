@@ -1,0 +1,4 @@
+# Synthetic validation only. NEVER mount host root, production state, or Docker socket.
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends python3 systemd && rm -rf /var/lib/apt/lists/*
+CMD ["/usr/bin/python3", "/test/agent_tests/test_linux_credentials.py"]

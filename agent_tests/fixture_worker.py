@@ -1,15 +1,22 @@
-"""Test-only worker: pin the ephemeral fixture certificate in headless Edge.
+"""Test-only worker: pin the ephemeral certificate in sandboxed Chromium/Edge.
 
 Production worker.py never imports this module or accepts browser test options.
 """
 import base64
 from pathlib import Path
 import sys
+import os
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes, serialization
 sys.path.insert(0,str(Path(__file__).resolve().parents[1] / 'agent_worker'))
 import worker
 from browser_worker import BrowserWorker
+
+if sys.platform.startswith('linux'):
+    # The disposable memory-only helper runs as the test user, never root.
+    # Production credentials.py still requires UID 0 with no fallback.
+    import credentials
+    credentials.ROOT_UID = os.getuid()
 
 cert=x509.load_pem_x509_certificate((Path(sys.argv[1])/'test-server.pem').read_bytes())
 hasher=hashes.Hash(hashes.SHA256())

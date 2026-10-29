@@ -10,6 +10,7 @@ import sys
 import bridge_core as core
 from browser_worker import BrowserWorker
 from job import contain_children
+from credentials import CredentialError, credential_status, load_credentials
 
 logging.disable(logging.CRITICAL)
 
@@ -50,10 +51,11 @@ def main():
                 request_id = request['id']
                 operation = request['operation']
                 payload = request.get('payload') or {}
-                if operation == 'credentials':
-                    value = json.loads(core.dpapi((root / 'state' / 'auth.dpapi').read_bytes(), decrypt=True))
-                    if value.get('server') != config['server']:
-                        raise core.BridgeError('credential_store', 'Server mismatch')
+                if operation in ('credentials', 'credential_status'):
+                    try:
+                        value = load_credentials(root, config) if operation == 'credentials' else credential_status(root, config)
+                    except CredentialError:
+                        raise core.BridgeError('credential_store', 'Credential provider unavailable') from None
                 elif operation == 'browser_close':
                     value = browser.call('close_all') if browser.thread and browser.thread.is_alive() else {'closed': True}
                 else:

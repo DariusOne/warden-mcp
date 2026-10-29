@@ -1,0 +1,8 @@
+{
+  "server": "https://vault.example.invalid",
+  "bw": "/opt/warden-hermes/runtime/bw-2026.9.1/bw",
+  "python": "/opt/warden-hermes/.venv/bin/python3.11",
+  "worker": "/opt/warden-hermes/agent_worker/worker.py",
+  "credential_socket": "/run/warden-hermes-credentials/credentials.sock",
+  "browser_executable": "/opt/warden-hermes/runtime/playwright/chromium-1208/chrome-linux64/chrome"
+}

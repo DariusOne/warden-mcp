@@ -70,6 +70,9 @@ test('resolveBundledBwBin returns null for non-executable candidate', async () =
       'utf8',
     );
     await writeFile(binPath, '#!/bin/sh\nexit 0\n', 'utf8');
+    // NAS default ACLs can add execute permission to a newly created file.
+    // Make this fixture explicitly non-executable instead of assuming umask.
+    await chmod(binPath, 0o600);
 
     const actual = resolveBundledBwBin(() => pkgManifest);
     assert.equal(actual, null);

@@ -35,6 +35,7 @@ export class PrivateWorker {
       resolve: (value: unknown) => void;
       reject: (error: Error) => void;
       timer: NodeJS.Timeout;
+      cleanup: () => void;
     }
   >();
   constructor(
@@ -49,15 +50,20 @@ export class PrivateWorker {
         ...childEnvironment(),
         PYTHONIOENCODING: 'utf-8',
         PYTHONDONTWRITEBYTECODE: '1',
+        WARDEN_PARENT_PID: String(process.pid),
       },
       stdio: ['pipe', 'pipe', 'pipe'],
       windowsHide: true,
+      // Linux contain_children turns this leader into a watchdog/subreaper;
+      // the actual worker runs in its own session, never Hermes' group.
+      detached: process.platform === 'linux',
     });
     this.child = child;
     // Discard raw library diagnostics, including potentially sensitive exceptions.
     child.stderr.on('data', () => {});
     const lines = createInterface({ input: child.stdout });
     lines.on('line', (line) => {
+      if (this.child !== child) return;
       try {
         if (line.length > 16 * 1024 * 1024) throw new Error();
         const response = JSON.parse(line);
@@ -65,6 +71,7 @@ export class PrivateWorker {
         if (!p) return;
         this.pending.delete(response.id);
         clearTimeout(p.timer);
+        p.cleanup();
         if (response.ok) p.resolve(response.value);
         else
           p.reject(
@@ -75,32 +82,53 @@ export class PrivateWorker {
                 : 'worker_failed',
             ),
           );
+        // The browser thread cannot be cancelled safely inside Python. Its
+        // timeout must dispose the entire worker, not leave a fill running.
+        if (!response.ok && response.code === 'browser_timeout') this.stop();
       } catch {
         this.stop();
       }
     });
-    child.on('error', () => this.stop());
-    child.on('exit', () => {
+    const stopThisChild = () => {
       if (this.child === child) this.stop();
-    });
-    child.stdin.on('error', () => this.stop());
+    };
+    child.on('error', stopThisChild);
+    child.on('exit', stopThisChild);
+    child.stdin.on('error', stopThisChild);
     return child;
   }
-  async call(operation: string, payload: unknown = {}): Promise<unknown> {
+  async call(
+    operation: string,
+    payload: unknown = {},
+    signal?: AbortSignal,
+  ): Promise<unknown> {
+    if (signal?.aborted) throw new SafeError('worker_cancelled');
     const child = this.start(),
       id = ++this.sequence;
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => this.stop(), 75_000);
-      this.pending.set(id, { resolve, reject, timer });
+      const timer = setTimeout(() => {
+        if (this.child === child) this.stop();
+      }, 75_000);
+      const abort = () => {
+        if (this.child === child) this.stop();
+      };
+      const cleanup = () => signal?.removeEventListener('abort', abort);
+      this.pending.set(id, { resolve, reject, timer, cleanup });
+      signal?.addEventListener('abort', abort, { once: true });
       child.stdin.write(`${JSON.stringify({ id, operation, payload })}\n`);
     });
   }
   stop(): void {
     const child = this.child;
     this.child = undefined;
+    // On Linux this signals the watchdog, which SIGKILLs/reaps its worker and
+    // adopted descendants. Do not killpg/SIGKILL the watchdog itself: it must
+    // survive long enough to reap Chromium's detached process groups.
+    // On Windows termination closes the worker's kill-on-close Job Object.
     child?.kill();
     for (const p of this.pending.values()) {
       clearTimeout(p.timer);
+      p.cleanup();
       p.reject(new SafeError('worker_failed'));
     }
     this.pending.clear();

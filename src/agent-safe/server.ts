@@ -1,11 +1,17 @@
-import { readFile, stat } from 'node:fs/promises';
-import { isAbsolute, join } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import { runBw } from '../bw/bwCli.js';
+import {
+  configureBwCliContainment,
+  runBw,
+  withBwCancellation,
+} from '../bw/bwCli.js';
+import { loadAgentConfig } from './config.js';
 import { record } from './filter.js';
-import { type AgentConfig, AgentVault } from './vault.js';
+import { AgentVault } from './vault.js';
 
 const READ = {
   readOnlyHint: true,
@@ -124,26 +130,46 @@ export function registerAgentTools(server: McpServer, vault: AgentVault): void {
       },
     );
   }
+  // SDK diagnostics include unrecognized keys/tool names. Keep its listed schemas,
+  // but validate calls here so even previously unknown secrets cannot be echoed.
+  server.server.setRequestHandler(
+    CallToolRequestSchema,
+    async (request, extra) => {
+      const invalid = {
+        isError: true,
+        content: [{ type: 'text' as const, text: 'Invalid tool request.' }],
+      };
+      const name = request.params.name;
+      if (!Object.hasOwn(tools, name)) return invalid;
+      const definition = tools[name as keyof typeof tools];
+      const parsed = z
+        .object(definition.input)
+        .strict()
+        .safeParse(request.params.arguments ?? {});
+      if (!parsed.success || request.params.task) return invalid;
+      try {
+        const result = await withBwCancellation(extra.signal, () =>
+          vault.invoke(name, record(parsed.data), extra.signal),
+        );
+        return {
+          content: [{ type: 'text' as const, text: JSON.stringify(result) }],
+          structuredContent: result,
+        };
+      } catch {
+        return {
+          isError: true,
+          content: [{ type: 'text' as const, text: 'Local operation failed.' }],
+        };
+      }
+    },
+  );
 }
 
 export async function runAgentSafe(root: string): Promise<void> {
-  if (process.platform !== 'win32' || !isAbsolute(root))
-    throw new Error('agent_safe_config');
-  const config = JSON.parse(
-    await readFile(join(root, 'config.json'), 'utf8'),
-  ) as AgentConfig;
-  const url = new URL(config.server);
-  if (
-    url.protocol !== 'https:' ||
-    url.username ||
-    url.password ||
-    url.search ||
-    url.hash
-  )
-    throw new Error('agent_safe_config');
-  for (const path of [config.bw, config.python, config.worker])
-    if (!isAbsolute(path) || !(await stat(path)).isFile())
-      throw new Error('agent_safe_config');
+  const config = await loadAgentConfig(root);
+  await configureBwCliContainment(config.python, config.worker);
+  const home = join(root, 'state', 'cli');
+  await mkdir(home, { recursive: true, mode: 0o700 });
   // Safe mode never inherits a debug switch or an externally supplied session.
   for (const key of Object.keys(process.env))
     if (/^(BW_|KEYCHAIN_|NODE_OPTIONS$)/.test(key)) delete process.env[key];
@@ -152,6 +178,7 @@ export async function runAgentSafe(root: string): Promise<void> {
   const version = await runBw(['--version'], {
     noInteraction: false,
     timeoutMs: 10_000,
+    env: { BITWARDENCLI_APPDATA_DIR: home },
   });
   if (version.stdout.trim() !== '2026.9.1')
     throw new Error('agent_safe_cli_version');
@@ -168,10 +195,16 @@ export async function runAgentSafe(root: string): Promise<void> {
   const closed = new Promise<void>((resolve) => {
     transport.onclose = resolve;
   });
-  await server.connect(transport);
+  const close = () => {
+    void server.close().catch(() => {});
+  };
+  process.stdin.once('end', close);
   try {
+    await server.connect(transport);
+    if (process.stdin.readableEnded) close();
     await closed;
   } finally {
+    process.stdin.off('end', close);
     await vault.revoke();
   }
 }

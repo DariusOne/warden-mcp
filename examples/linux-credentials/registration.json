@@ -1,0 +1,5 @@
+{
+  "uid": 1000,
+  "gid": 1001,
+  "server": "https://vault.example.invalid/bitwarden"
+}

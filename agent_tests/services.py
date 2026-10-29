@@ -14,6 +14,7 @@ import time
 from urllib.parse import parse_qs
 import paramiko
 import pymysql
+from harness_helpers import docker_command, valid_totp, isolated_environment
 logging.getLogger('paramiko').setLevel(logging.CRITICAL)
 
 
@@ -37,17 +38,27 @@ class Services:
         hostkeys = paramiko.HostKeys()
         hostkeys.add('[127.0.0.1]:' + str(self.ssh_port), self.key.get_name(), self.key)
         hostkeys.save(str(self.root / 'state' / 'known_hosts'))
+        (self.root / 'state' / 'known_hosts').chmod(0o600)
+        changed = paramiko.HostKeys()
+        wrong = paramiko.RSAKey.generate(2048)
+        changed.add('[127.0.0.1]:' + str(self.ssh_port), wrong.get_name(), wrong)
+        changed.save(str(self.root / 'changed_known_hosts'))
+        (self.root / 'changed_known_hosts').chmod(0o600)
         threading.Thread(target=self._ssh_loop, daemon=True).start()
         self._start_mysql()
         owner = self
         class Handler(http.server.BaseHTTPRequestHandler):
             def log_message(self, *_): pass
             def do_GET(self):
+                if self.path == '/__audit':
+                    self.send_response(200); self.end_headers()
+                    self.wfile.write(json.dumps({'submissions':len(owner.web_received), 'ssh_executed':owner.ssh_executed}).encode())
+                    return
                 content = '<html><title>Agent fixture</title><body><form method="post" action="/login"><input name="user" aria-label="Username"><input name="password" type="password" aria-label="Password"><input name="otp" aria-label="OTP"><button>Sign in</button></form></body></html>'
                 self.send_response(200); self.end_headers(); self.wfile.write(content.encode())
             def do_POST(self):
                 body = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
-                owner.web_received.append({'password_ok':body.get('password',[''])[0] == owner.markers['password'], 'totp_present': len(body.get('otp',[''])[0]) in (6,8)})
+                owner.web_received.append({'password_ok':body.get('password',[''])[0] == owner.markers['password'], 'totp_valid': valid_totp(owner.markers['totp'], body.get('otp',[''])[0])})
                 self.send_response(200); self.end_headers()
                 self.wfile.write(('<html><title>Signed in</title><body>' + owner.markers['password'] + ' ' + body.get('otp',[''])[0] + '</body></html>').encode())
         self.web = http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
@@ -90,15 +101,15 @@ class Services:
 
     def _start_mysql(self):
         root_password=secrets.token_urlsafe(30)
-        env=dict(os.environ,MYSQL_ROOT_PASSWORD=root_password)
-        args=[self.docker,'--context','desktop-linux','run','--detach','--pull=never',
+        env=dict(isolated_environment(os.environ),MYSQL_ROOT_PASSWORD=root_password)
+        args=[*docker_command(self.docker),'run','--detach','--pull=never',
               '--name',self.mysql_name,'--label','local.warden.test='+self.run_id,
               '--publish','127.0.0.1::3306','--tmpfs','/var/lib/mysql:rw,size=512m',
-              '--env','MYSQL_ROOT_PASSWORD','--env','MYSQL_ROOT_HOST=%','mysql:5.7']
+              '--env','MYSQL_ROOT_PASSWORD','--env','MYSQL_ROOT_HOST=%','mysql@sha256:4bc6bc963e6d8443453676cae56536f4b8156d78bae03c0145cbe47c2aad73bb']
         p=subprocess.run(args,env=env,capture_output=True)
         if p.returncode: raise RuntimeError('mysql_fixture_start')
         self.mysql_started=True
-        port=subprocess.check_output([self.docker,'--context','desktop-linux','port',self.mysql_name,'3306'],text=True).strip()
+        port=subprocess.check_output([*docker_command(self.docker),'port',self.mysql_name,'3306'],text=True).strip()
         self.mysql_port=int(port.rsplit(':',1)[1])
         conn=None
         for _ in range(120):
@@ -120,6 +131,10 @@ class Services:
         if self.sock: self.sock.close()
         if self.web: self.web.shutdown(); self.web.server_close()
         if self.mysql_started:
-            p=subprocess.run([self.docker,'--context','desktop-linux','inspect','--format','{{ index .Config.Labels "local.warden.test" }}',self.mysql_name],capture_output=True,text=True)
+            p=subprocess.run([*docker_command(self.docker),'inspect','--format','{{ index .Config.Labels "local.warden.test" }}',self.mysql_name],capture_output=True,text=True)
             if p.returncode == 0 and p.stdout.strip() == self.run_id:
-                subprocess.run([self.docker,'--context','desktop-linux','rm','-f',self.mysql_name],capture_output=True,check=True)
+                subprocess.run([*docker_command(self.docker),'rm','-f',self.mysql_name],capture_output=True,check=True)
+                remaining=subprocess.run([*docker_command(self.docker),'ps','-a','--filter','name=^/'+self.mysql_name+'$','--filter','label=local.warden.test='+self.run_id,'--format','{{.Names}}'],capture_output=True,text=True,check=True)
+                if remaining.stdout.strip(): raise RuntimeError('mysql_fixture_cleanup')
+            else:
+                raise RuntimeError('mysql_fixture_cleanup_identity')
