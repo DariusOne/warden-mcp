@@ -9,7 +9,8 @@
         "/srv/warden"
       ],
       "connect_timeout": 30,
-      "timeout": 120,
+      "timeout": 480,
+      "elicitation": { "enabled": true, "timeout": 300 },
       "trust": "untrusted",
       "sampling": { "enabled": false },
       "tools": {

@@ -113,9 +113,12 @@ export class PrivateWorker {
     const child = this.start(),
       id = ++this.sequence;
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        if (this.child === child) this.stop();
-      }, operation === 'ssh_exec' ? 110_000 : 75_000);
+      const timer = setTimeout(
+        () => {
+          if (this.child === child) this.stop();
+        },
+        operation === 'ssh_exec' ? 110_000 : 75_000,
+      );
       const abort = () => {
         if (this.child === child) this.stop();
       };

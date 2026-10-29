@@ -1,7 +1,7 @@
 [mcp_servers.vaultwarden]
 command = "C:\\PrivateRuntime\\runtime\\node.exe"
-args = ["C:\\PrivateRuntime\\versions\\agent-v0.1.0\\dist\\server.js", "--agent-safe", "--agent-root", "C:\\PrivateRuntime"]
+args = ["C:\\PrivateRuntime\\versions\\agent-v0.2.0\\dist\\server.js", "--agent-safe", "--agent-root", "C:\\PrivateRuntime"]
 startup_timeout_sec = 30
-tool_timeout_sec = 120
+tool_timeout_sec = 480
 enabled = true
 enabled_tools = ["status", "search", "sync", "browser_open", "browser_state", "browser_fill_login", "browser_fill_totp", "browser_action", "mysql_query", "ssh_exec", "browser_close", "pause_access"]

@@ -30,6 +30,7 @@ args = ["unchanged"]
             self.assertEqual(after['mcp_servers']['other'],tomllib.loads(before)['mcp_servers']['other'])
             self.assertEqual(after['mcp_servers']['vaultwarden']['default_tools_approval_mode'],'prompt')
             self.assertEqual(len(after['mcp_servers']['vaultwarden']['enabled_tools']),12)
+            self.assertEqual(after['mcp_servers']['vaultwarden']['tool_timeout_sec'],480)
             args[2]='rollback'
             self.assertEqual(subprocess.run(args,capture_output=True).returncode,0)
             self.assertEqual(cfg.read_bytes(),before.encode())

@@ -24,6 +24,7 @@ class Services:
         self.closed = False
         self.web_received = []
         self.ssh_executed = 0
+        self.ssh_auth = 0
         self.mysql_name = 'warden-agent-test-mysql-' + run_id
         self.mysql_started = False
         self.web = None
@@ -52,7 +53,7 @@ class Services:
             def do_GET(self):
                 if self.path == '/__audit':
                     self.send_response(200); self.end_headers()
-                    self.wfile.write(json.dumps({'submissions':len(owner.web_received), 'ssh_executed':owner.ssh_executed}).encode())
+                    self.wfile.write(json.dumps({'submissions':len(owner.web_received), 'ssh_executed':owner.ssh_executed, 'ssh_auth':owner.ssh_auth}).encode())
                     return
                 content = '<html><title>Agent fixture</title><body><form method="post" action="/login"><input name="user" aria-label="Username"><input name="password" type="password" aria-label="Password"><input name="otp" aria-label="OTP"><button>Sign in</button></form></body></html>'
                 self.send_response(200); self.end_headers(); self.wfile.write(content.encode())
@@ -72,6 +73,7 @@ class Services:
         owner = self
         class Server(paramiko.ServerInterface):
             def check_auth_password(self, username, password):
+                owner.ssh_auth += 1
                 return paramiko.AUTH_SUCCESSFUL if username == 'tester' and password == owner.markers['password'] else paramiko.AUTH_FAILED
             def get_allowed_auths(self, username): return 'password'
             def check_channel_request(self, kind, chanid): return paramiko.OPEN_SUCCEEDED if kind == 'session' else paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED

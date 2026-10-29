@@ -1,4 +1,4 @@
-# Agent-safe Windows stdio mode
+# Agent-safe local stdio mode
 
 This fork keeps upstream 0.2.60 and adds a local credential-use interface.
 It does not require changes to Vaultwarden, its database, proxy or certificates.
@@ -13,6 +13,11 @@ checks the CLI version at startup and never falls back to the bundled CLI.
 Keep build output and dependencies in a versioned runtime directory, independent
 of the source checkout. Configure an ACL granting only the deployment user,
 SYSTEM and administrators access to the runtime root and its descendants.
+
+Linux uses the same pinned Node and standalone CLI, Python 3.11+, a dedicated
+Chromium executable, and the root-managed credential provider described in
+[Linux credentials](docs/linux-credentials.md). Existing enrollment stays in
+place during an upgrade. Never replace it with the synthetic test provider.
 
 Create `config.json` in the private runtime root, following
 `examples/agent-safe/config.example.json`. Paths must be absolute. The root holds:
@@ -55,8 +60,10 @@ presence flags. Custom fields, notes and full URLs are not returned.
 Unknown tools, including upstream password/export/attachment/Send tools and
 private worker operations, are rejected at the server.
 
-SSH uses password authentication and strict known-host validation. Add a host
-key only after independently verifying its fingerprint. MySQL permits bounded
+SSH uses password authentication and strict known-host validation. First use
+requires a per-call MCP form confirmation showing the public host fingerprint;
+see [SSH host trust](SSH_HOST_TRUST.md). Changed keys are never automatically
+replaced. MySQL permits bounded
 read-only statements in a read-only transaction, with a query timeout and at
 most 500 returned rows. Neither a password-vault read nor an SSH command implies
 that the external operation is read-only. Existing destructive/open-world hints
@@ -117,7 +124,13 @@ Fork workflows remain disabled, release jobs also check the upstream repository,
 and `package.json` is private to prevent accidental npm publication.
 
 Back up only the existing Codex `mcp_servers.vaultwarden` block before switching.
-The example sets 30-second startup and 120-second tool timeouts and an explicit
+The example sets 30-second startup and 480-second tool timeouts and an explicit
 tool allowlist; retain the user's approval settings. Rollback restores only
 that block and stops the new runtime. Keep the old bridge and encrypted data.
 Vaultwarden data and other Codex MCP entries are outside this migration.
+
+For an existing installation use `agent_tools/stage_release.py` to stage an
+immutable candidate, not the initial Windows `stage.ps1` migration. The upgrade
+stager never copies enrollment, policy or trust records. Both platforms must
+identify the same reviewed source commit. A candidate is not an accepted
+release until Codex and Hermes have each exercised real human confirmation.

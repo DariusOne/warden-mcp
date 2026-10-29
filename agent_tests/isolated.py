@@ -188,6 +188,10 @@ try:
     PROFILE.mkdir(mode=0o700)
     FIXTURES.mkdir(mode=0o700)
     (FIXTURES / "state").mkdir(mode=0o700)
+    # NAS shared-directory ACLs may override mkdir's requested mode. Apply and
+    # verify private modes explicitly; never weaken the production check.
+    for directory in (PROFILE, FIXTURES, FIXTURES / 'state'):
+        directory.chmod(0o700)
     env = isolated_environment(os.environ)
     env['BITWARDENCLI_APPDATA_DIR'] = str(PROFILE)
     env['NO_PROXY'] = '127.0.0.1,localhost'
@@ -316,6 +320,9 @@ try:
         RESULT['root_encrypted_service_validation'] = 'not covered by this synthetic fixture'
     write_private(FIXTURES/'config.json', json.dumps(cfg))
     write_private(FIXTURES/'access.json', json.dumps({'enabled':True,'allow_all':True,'items':[]}))
+    if sys.platform == 'linux':
+        (FIXTURES/'state/cli').mkdir(mode=0o700,exist_ok=True)
+        (FIXTURES/'state/cli').chmod(0o700)
     client_env = isolated_environment(env)
     proc = subprocess.run([NODE,str(REPO/'agent_tests/client.mjs')],input=json.dumps({'root':str(FIXTURES),'base':base,'bw':BW,'python':sys.executable,'email':email,'master':master,'itemId':created['id'],'ids':ids,'markers':markers,'attachmentId':attachment_id,'sendId':send['id'],'webUrl':services.web_url}),capture_output=True,text=True,encoding='utf-8',errors='replace',env=client_env,timeout=900)
     if proc.returncode:

@@ -16,7 +16,8 @@ class HermesExampleTests(unittest.TestCase):
         self.assertEqual(server['trust'], 'untrusted')
         self.assertEqual(server['sampling'], {'enabled': False})
         self.assertEqual(server['connect_timeout'], 30)
-        self.assertEqual(server['timeout'], 120)
+        self.assertEqual(server['timeout'], 480)
+        self.assertEqual(server['elicitation'], {'enabled': True, 'timeout': 300})
         self.assertIn('--agent-safe', server['args'])
         self.assertNotIn('--http', server['args'])
         expected = {'status', 'search', 'sync', 'browser_open', 'browser_state',

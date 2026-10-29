@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs, {
   chmod,
+  link,
   mkdir,
   mkdtemp,
   readdir,
@@ -102,7 +103,7 @@ test('pause stops an in-flight private operation before waiting for the vault lo
   }
 });
 
-test('audit never appends through symlinks and new logs are private', async (t) => {
+test('audit never appends through links and new logs are private', async (t) => {
   const f = await fixture(t);
   t.mock.method(f.vault.worker, 'call', async () => ({ registered: false }));
   try {
@@ -110,12 +111,19 @@ test('audit never appends through symlinks and new logs are private', async (t) 
     const name = `audit-${new Date().toISOString().slice(0, 10)}.jsonl`;
     const victim = join(f.root, 'victim');
     await writeFile(victim, 'untouched');
-    await symlink(victim, join(f.root, 'logs', name));
+    await (process.platform === 'win32' ? link : symlink)(
+      victim,
+      join(f.root, 'logs', name),
+    );
     assert.equal((await f.vault.invoke('status', {})).ok, false);
     assert.equal(await readFile(victim, 'utf8'), 'untouched');
     await rm(join(f.root, 'logs', name));
     assert.equal((await f.vault.invoke('status', {})).ok, true);
-    assert.equal((await stat(join(f.root, 'logs', name))).mode & 0o777, 0o600);
+    if (process.platform !== 'win32')
+      assert.equal(
+        (await stat(join(f.root, 'logs', name))).mode & 0o777,
+        0o600,
+      );
   } finally {
     await f.cleanup();
   }
@@ -127,14 +135,21 @@ test('pause replaces policy privately without following a predictable temporary 
   try {
     const victim = join(f.root, 'victim');
     await writeFile(victim, 'untouched');
-    await symlink(victim, join(f.root, 'access.json.tmp'));
+    await (process.platform === 'win32' ? link : symlink)(
+      victim,
+      join(f.root, 'access.json.tmp'),
+    );
     assert.equal((await f.vault.invoke('pause_access', {})).ok, true);
     assert.equal(await readFile(victim, 'utf8'), 'untouched');
     assert.equal(
       JSON.parse(await readFile(join(f.root, 'access.json'), 'utf8')).enabled,
       false,
     );
-    assert.equal((await stat(join(f.root, 'access.json'))).mode & 0o777, 0o600);
+    if (process.platform !== 'win32')
+      assert.equal(
+        (await stat(join(f.root, 'access.json'))).mode & 0o777,
+        0o600,
+      );
   } finally {
     await f.cleanup();
   }

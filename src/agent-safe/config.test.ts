@@ -47,7 +47,9 @@ async function fixture() {
   };
 }
 
-test('Linux validates private runtime state and root-managed credential socket', async () => {
+test('Linux validates private runtime state and root-managed credential socket', {
+  skip: process.platform !== 'linux',
+}, async () => {
   const load = await loader(),
     f = await fixture();
   try {
@@ -62,7 +64,10 @@ test('Linux validates private runtime state and root-managed credential socket',
         join(f.root, 'config.json'),
         JSON.stringify({ ...f.config, credential_socket }),
       );
-      await assert.rejects(load(f.root, 'linux'), /^Error: agent_safe_config$/);
+      await assert.rejects(
+        load(f.root, process.platform),
+        /^Error: agent_safe_config$/,
+      );
     }
     await writeFile(join(f.root, 'config.json'), JSON.stringify(f.config));
     for (const name of ['state', 'logs']) {
@@ -81,7 +86,9 @@ test('Linux validates private runtime state and root-managed credential socket',
   }
 });
 
-test('Linux rejects noncanonical, nonprivate, missing, or nonexecutable paths', async () => {
+test('Linux rejects noncanonical, nonprivate, missing, or nonexecutable paths', {
+  skip: process.platform !== 'linux',
+}, async () => {
   const load = await loader(),
     f = await fixture();
   try {
@@ -160,7 +167,10 @@ test('config rejects unsafe server URLs and malformed config without echoing val
         join(f.root, 'config.json'),
         JSON.stringify({ ...f.config, server }),
       );
-      await assert.rejects(load(f.root, 'linux'), /^Error: agent_safe_config$/);
+      await assert.rejects(
+        load(f.root, process.platform),
+        /^Error: agent_safe_config$/,
+      );
     }
     for (const value of [
       'secret',
@@ -170,14 +180,19 @@ test('config rejects unsafe server URLs and malformed config without echoing val
       JSON.stringify({ ...f.config, unknown: 'secret' }),
     ]) {
       await writeFile(join(f.root, 'config.json'), value);
-      await assert.rejects(load(f.root, 'linux'), /^Error: agent_safe_config$/);
+      await assert.rejects(
+        load(f.root, process.platform),
+        /^Error: agent_safe_config$/,
+      );
     }
   } finally {
     await f.cleanup();
   }
 });
 
-test('Linux loads a canonical private config and rejects unsupported platforms', async () => {
+test('Linux loads a canonical private config and rejects unsupported platforms', {
+  skip: process.platform !== 'linux',
+}, async () => {
   const f = await fixture();
   try {
     // Dynamic loading makes the first RED assert the missing feature explicitly.
@@ -195,6 +210,29 @@ test('Linux loads a canonical private config and rejects unsupported platforms',
       loadAgentConfig(f.root, 'darwin'),
       /^Error: agent_safe_config$/,
     );
+  } finally {
+    await f.cleanup();
+  }
+});
+
+test('Windows validates native paths without a Linux credential socket', {
+  skip: process.platform !== 'win32',
+}, async () => {
+  const load = await loader(),
+    f = await fixture();
+  try {
+    assert.deepEqual(await load(f.root), f.config);
+    for (const update of [
+      { bw: 'relative' },
+      { worker: join(f.root, 'absent') },
+      { credential_socket: '/run/warden-hermes-credentials/credentials.sock' },
+    ]) {
+      await writeFile(
+        join(f.root, 'config.json'),
+        JSON.stringify({ ...f.config, ...update }),
+      );
+      await assert.rejects(load(f.root), /^Error: agent_safe_config$/);
+    }
   } finally {
     await f.cleanup();
   }

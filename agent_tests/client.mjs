@@ -4,6 +4,7 @@ import {join,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {Client} from '@modelcontextprotocol/sdk/client/index.js';
 import {StdioClientTransport} from '@modelcontextprotocol/sdk/client/stdio.js';
+import {ElicitRequestSchema} from '@modelcontextprotocol/sdk/types.js';
 import {AgentVault} from '../dist/agent-safe/vault.js';
 import {configureBwCliContainment} from '../dist/bw/bwCli.js';
 import {spawn} from 'node:child_process';
@@ -13,6 +14,7 @@ const fixture=JSON.parse(input); input='';
 const result={completed:false,checks:{}};
 const successes=new Set(),errors=new Set(),identities=new Map();
 let stage='initialize',client,transport,idleVault,raw='',diagnostics='';
+let hostDecision='decline',hostPrompts=0;
 let monitor,probePromise=Promise.resolve(),probeBusy=false,probeFailed=false,probeCount=0;
 const secrets=[fixture.master,...Object.values(fixture.markers)];
 const encodings=secrets.flatMap(s=>[s,encodeURIComponent(s),Buffer.from(s).toString('base64'),Buffer.from(s).toString('hex')]);
@@ -34,7 +36,15 @@ async function linuxProbe(request) {
   });
 }
 async function start() {
-  client=new Client({name:'isolated-agent-validation',version:'1'});
+  client=new Client({name:'isolated-agent-validation',version:'1'}, {capabilities:{elicitation:{form:{}}}});
+  client.setRequestHandler(ElicitRequestSchema, async request=>{
+    noSecrets(request); hostPrompts++;
+    assert.equal(request.params.mode,'form');
+    assert.deepEqual(request.params.requestedSchema,{type:'object',properties:{}});
+    assert.match(request.params.message,/SHA256:[A-Za-z0-9+/]{43}/);
+    assert.equal((await audit()).ssh_auth,(await audit()).ssh_executed);
+    return {action:hostDecision,content:{}};
+  });
   const args=process.platform==='win32'?[join(repo,'dist/server.js'),'--agent-safe','--agent-root',fixture.root]:[join(repo,'agent_tests/fixture_server.mjs'),fixture.root];
   transport=new StdioClientTransport({command:process.execPath,args,env:{...process.env},stderr:'pipe'});
   transport.stderr?.on('data',x=>{diagnostics+=x;});
@@ -89,13 +99,23 @@ try {
   assert.ok(ssh.stdout.includes('[REDACTED]')); assert.ok(ssh.stderr.includes('[REDACTED]'));
   const kh=join(fixture.root,'state/known_hosts'),saved=await readFile(kh);
   await writeFile(kh,'');
-  try { assert.equal((await call('ssh_exec',{item_id:fixture.ids.ssh,command:'must-not-run'})).ok,false); }
+  try {
+    assert.equal((await call('ssh_exec',{item_id:fixture.ids.ssh,command:'must-not-run'})).error,'ssh_confirmation_denied');
+    assert.equal((await audit()).ssh_auth,1); assert.equal((await audit()).ssh_executed,1);
+    hostDecision='accept';
+    await ok('ssh_exec',{item_id:fixture.ids.ssh,command:'confirmed-fixture'});
+    assert.equal(hostPrompts,2); assert.equal((await readFile(kh)).toString().trim(),saved.toString().trim());
+    await client.close(); await start();
+    await ok('ssh_exec',{item_id:fixture.ids.ssh,command:'confirmed-after-restart'});
+    assert.equal(hostPrompts,2);
+  }
   finally { await writeFile(kh,saved); }
   await writeFile(kh,await readFile(join(fixture.root,'changed_known_hosts')));
   try { assert.equal((await call('ssh_exec',{item_id:fixture.ids.ssh,command:'must-not-run-changed-key'})).ok,false); }
   finally { await writeFile(kh,saved); }
-  assert.equal((await audit()).ssh_executed,1);
-  result.checks.ssh_exec_redaction_unknown_and_changed_host_rejection=true;
+  assert.equal((await audit()).ssh_executed,3);
+  assert.equal((await audit()).ssh_auth,3);
+  result.checks.ssh_first_trust_decline_accept_restart_and_changed_rejection=true;
   stage='mysql';
   const mysql=await ok('mysql_query',{item_id:fixture.ids.mysql,sql:'SELECT value FROM canaries',max_rows:900});
   assert.equal(mysql.rows.length,500); assert.equal(mysql.truncated,true);

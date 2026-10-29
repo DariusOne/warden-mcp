@@ -18,7 +18,7 @@ def main():
     ap.add_argument('mode',choices=['activate','rollback'])
     ap.add_argument('--root',type=Path,required=True)
     ap.add_argument('--config',type=Path,required=True)
-    ap.add_argument('--version',default='agent-v0.1.0')
+    ap.add_argument('--version',default='agent-v0.2.0')
     args=ap.parse_args()
     root=args.root.resolve(); config=args.config.resolve()
     original=config.read_bytes().decode('utf-8-sig')
@@ -32,7 +32,7 @@ def main():
         values={
             'command':str(root/'runtime/node.exe'),
             'args':[str(root/'versions'/args.version/'dist/server.js'),'--agent-safe','--agent-root',str(root)],
-            'startup_timeout_sec':30,'tool_timeout_sec':120,'enabled':True,'enabled_tools':TOOLS,
+            'startup_timeout_sec':30,'tool_timeout_sec':480,'enabled':True,'enabled_tools':TOOLS,
         }
         if 'disabled_tools' in parsed['mcp_servers']['vaultwarden']:
             values['disabled_tools']=parsed['mcp_servers']['vaultwarden']['disabled_tools']
