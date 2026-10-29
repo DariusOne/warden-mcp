@@ -17,6 +17,15 @@ import { KeychainSdk } from '../sdk/keychainSdk.js';
 import type { AgentConfig } from './config.js';
 import { metadata, record, SecretFilter } from './filter.js';
 import { PrivateWorker, SafeError } from './privateWorker.js';
+import {
+  type ConfirmHostKey,
+  confirmationMessage,
+  HOST_CONFIRMATION_MS,
+  type HostDecision,
+  publicHostKey,
+  SSH_MESSAGES,
+} from './sshTrust.js';
+import { buildIdentity } from './version.js';
 
 export type { AgentConfig } from './config.js';
 export const ID =
@@ -38,6 +47,7 @@ const ACTIONS = new Set([
 ]);
 
 const SAFE_CODES = new Set([
+  ...Object.keys(SSH_MESSAGES),
   'action',
   'browser_failed',
   'browser_timeout',
@@ -88,6 +98,7 @@ export class AgentVault {
   private generation = 0;
   private pausePending = 0;
   private pauseRevision: string | undefined;
+  private confirmation: AbortController | undefined;
   constructor(
     readonly root: string,
     readonly config: AgentConfig,
@@ -210,6 +221,7 @@ export class AgentVault {
   }
   async revoke(): Promise<void> {
     this.generation++;
+    this.confirmation?.abort();
     if (this.policyTimer) clearTimeout(this.policyTimer);
     this.policyTimer = undefined;
     if (this.timer) clearTimeout(this.timer);
@@ -224,6 +236,7 @@ export class AgentVault {
     action: string,
     args: Record<string, unknown>,
     signal?: AbortSignal,
+    confirmHost?: ConfirmHostKey,
   ): Promise<Record<string, unknown>> {
     if (!ACTIONS.has(action))
       return {
@@ -233,6 +246,7 @@ export class AgentVault {
       };
     // The flag takes effect even if another operation is already in flight.
     if (action === 'pause_access') {
+      this.confirmation?.abort();
       this.paused = true;
       this.generation++;
       this.pausePending++;
@@ -247,7 +261,10 @@ export class AgentVault {
     }
     return this.lock.runExclusive(async () => {
       const generation = this.generation;
-      const abort = () => this.worker.stop();
+      const abort = () => {
+        this.confirmation?.abort();
+        this.worker.stop();
+      };
       signal?.addEventListener('abort', abort, { once: true });
       try {
         signal?.throwIfAborted();
@@ -256,7 +273,13 @@ export class AgentVault {
           this.watchPolicy();
         }
         signal?.throwIfAborted();
-        const result = await this.run(action, args, signal, generation);
+        const result = await this.run(
+          action,
+          args,
+          signal,
+          generation,
+          confirmHost,
+        );
         signal?.throwIfAborted();
         if (action !== 'status' && action !== 'pause_access')
           await this.enabled(undefined, generation);
@@ -272,10 +295,14 @@ export class AgentVault {
           this.filter.clean({
             ok: false,
             error: code,
+            ...(error instanceof SafeError && error.hostKey
+              ? { host_key: publicHostKey(error.hostKey) }
+              : {}),
             message:
               code === 'disabled'
                 ? '接入已暂停，请通过本机管理窗口恢复。'
-                : '本机操作未完成；原始错误已隐藏，请检查本机凭据、目标配置或连接。',
+                : (SSH_MESSAGES[code] ??
+                  '本机操作未完成；原始错误已隐藏，请检查本机凭据、目标配置或连接。'),
           }),
         );
       } finally {
@@ -295,10 +322,12 @@ export class AgentVault {
     args: Record<string, unknown>,
     signal?: AbortSignal,
     generation = this.generation,
+    confirmHost?: ConfirmHostKey,
   ): Promise<unknown> {
     if (action === 'status') {
       const p = await this.policy();
       return {
+        ...(await buildIdentity(this.config.worker)),
         server: this.config.server,
         credential_enrolled:
           process.platform === 'linux'
@@ -391,11 +420,91 @@ export class AgentVault {
     // Recheck policy after asynchronous reads, before using credentials.
     await this.enabled(itemId, generation);
     signal?.throwIfAborted();
-    const result = await this.worker.call(action, { args, item, otp });
+    const result =
+      action === 'ssh_exec'
+        ? await this.ssh(args, itemId, item, generation, signal, confirmHost)
+        : await this.worker.call(action, { args, item, otp }, signal);
     await this.enabled(itemId, generation);
     if (action === 'browser_open' && typeof record(result).page_id === 'string')
       this.pages.set(String(record(result).page_id), itemId);
     return result;
+  }
+  private async ssh(
+    args: Record<string, unknown>,
+    itemId: string,
+    item: unknown,
+    generation: number,
+    signal?: AbortSignal,
+    confirm?: ConfirmHostKey,
+  ): Promise<unknown> {
+    try {
+      return await this.worker.call('ssh_exec', { args, item }, signal);
+    } catch (error) {
+      if (!(error instanceof SafeError) || error.code !== 'ssh_host_unknown')
+        throw error;
+      const info = error.hostKey;
+      if (!info) throw new SafeError('ssh_failed');
+      const message = confirmationMessage(info, item, this.filter);
+      if (!confirm || !message)
+        throw new SafeError('ssh_confirmation_required', info);
+      const controller = new AbortController();
+      this.confirmation = controller;
+      const combined = AbortSignal.any([
+        controller.signal,
+        ...(signal ? [signal] : []),
+      ]);
+      const expires = Date.now() + HOST_CONFIRMATION_MS;
+      let expired = false;
+      const timer = setTimeout(() => {
+        expired = true;
+        controller.abort();
+      }, HOST_CONFIRMATION_MS);
+      timer.unref();
+      let onAbort: () => void = () => {};
+      try {
+        await this.enabled(itemId, generation);
+        combined.throwIfAborted();
+        const cancelled = new Promise<HostDecision>((resolve) => {
+          onAbort = () => resolve('cancel');
+          combined.addEventListener('abort', onAbort, { once: true });
+        });
+        const decision = await Promise.race([
+          confirm(message, combined),
+          cancelled,
+        ]);
+        await this.enabled(itemId, generation);
+        if (expired || decision === 'timeout' || Date.now() >= expires)
+          throw new SafeError('ssh_confirmation_timeout', info);
+        if (combined.aborted || decision === 'cancel')
+          throw new SafeError('ssh_confirmation_cancelled', info);
+        if (decision !== 'accept')
+          throw new SafeError(
+            decision === 'unavailable'
+              ? 'ssh_confirmation_required'
+              : 'ssh_confirmation_denied',
+            info,
+          );
+        // Approval never authorizes a stale cached target or another account.
+        await this.sdk.sync();
+        this.lastSync = Date.now();
+        const fresh = await this.item(itemId);
+        await this.enabled(itemId, generation);
+        combined.throwIfAborted();
+        return await this.worker.call(
+          'ssh_exec',
+          {
+            args,
+            item: fresh,
+            ssh_approval: { ...info, expires_at: expires },
+          },
+          combined,
+        );
+      } finally {
+        clearTimeout(timer);
+        combined.removeEventListener('abort', onAbort);
+        if (this.confirmation === controller) this.confirmation = undefined;
+      }
+    }
   }
   private async audit(
     action: string,

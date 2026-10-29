@@ -1,8 +1,12 @@
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
+import { type HostKeyInfo, parseHostKey } from './sshTrust.js';
 
 export class SafeError extends Error {
-  constructor(readonly code: string) {
+  constructor(
+    readonly code: string,
+    readonly hostKey?: HostKeyInfo,
+  ) {
     super(code);
   }
 }
@@ -80,6 +84,9 @@ export class PrivateWorker {
                 /^[a-z_]{1,40}$/.test(response.code)
                 ? response.code
                 : 'worker_failed',
+              ['ssh_host_unknown', 'ssh_host_changed'].includes(response.code)
+                ? parseHostKey(response.host_key)
+                : undefined,
             ),
           );
         // The browser thread cannot be cancelled safely inside Python. Its
@@ -108,7 +115,7 @@ export class PrivateWorker {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         if (this.child === child) this.stop();
-      }, 75_000);
+      }, operation === 'ssh_exec' ? 110_000 : 75_000);
       const abort = () => {
         if (this.child === child) this.stop();
       };

@@ -11,7 +11,9 @@ import {
 } from '../bw/bwCli.js';
 import { loadAgentConfig } from './config.js';
 import { record } from './filter.js';
+import { type ConfirmHostKey, HOST_CONFIRMATION_MS } from './sshTrust.js';
 import { AgentVault } from './vault.js';
+import { AGENT_VERSION } from './version.js';
 
 const READ = {
   readOnlyHint: true,
@@ -98,7 +100,8 @@ export const tools = {
       timeout: z.number().int().default(20),
     },
     annotations: WRITE,
-    description: '执行已授权 SSH 命令，严格校验 known_hosts；可能修改远端。',
+    description:
+      '执行已授权 SSH 命令；首次主机密钥通过客户端单独确认并在本机保存，密钥变化拒绝连接。可能修改远端。',
   },
   browser_close: {
     input: {},
@@ -113,6 +116,30 @@ export const tools = {
 };
 
 export function registerAgentTools(server: McpServer, vault: AgentVault): void {
+  const confirmation =
+    (requestId?: string | number): ConfirmHostKey =>
+    async (message, signal) => {
+      if (!server.server.getClientCapabilities()?.elicitation?.form)
+        return 'unavailable';
+      try {
+        const reply = await server.server.elicitInput(
+          {
+            mode: 'form',
+            message,
+            requestedSchema: { type: 'object', properties: {} },
+          },
+          {
+            signal,
+            timeout: HOST_CONFIRMATION_MS,
+            relatedRequestId: requestId,
+          },
+        );
+        return reply.action;
+      } catch (error) {
+        if (signal.aborted) return 'cancel';
+        return record(error).code === -32001 ? 'timeout' : 'unavailable';
+      }
+    };
   for (const [name, definition] of Object.entries(tools)) {
     server.registerTool(
       name,
@@ -122,7 +149,12 @@ export function registerAgentTools(server: McpServer, vault: AgentVault): void {
         annotations: definition.annotations,
       },
       async (args) => {
-        const result = await vault.invoke(name, record(args));
+        const result = await vault.invoke(
+          name,
+          record(args),
+          undefined,
+          confirmation(),
+        );
         return {
           content: [{ type: 'text' as const, text: JSON.stringify(result) }],
           structuredContent: result,
@@ -149,7 +181,12 @@ export function registerAgentTools(server: McpServer, vault: AgentVault): void {
       if (!parsed.success || request.params.task) return invalid;
       try {
         const result = await withBwCancellation(extra.signal, () =>
-          vault.invoke(name, record(parsed.data), extra.signal),
+          vault.invoke(
+            name,
+            record(parsed.data),
+            extra.signal,
+            confirmation(extra.requestId),
+          ),
         );
         return {
           content: [{ type: 'text' as const, text: JSON.stringify(result) }],
@@ -184,10 +221,10 @@ export async function runAgentSafe(root: string): Promise<void> {
     throw new Error('agent_safe_cli_version');
   const vault = new AgentVault(root, config);
   const server = new McpServer(
-    { name: 'vaultwarden', version: 'agent-v0.1.0' },
+    { name: 'vaultwarden', version: AGENT_VERSION },
     {
       instructions:
-        '使用 status/search 后按精确条目 ID 调用工具。密码、TOTP、主密码和会话不会返回。只可按用户授权连接或提交网页。不要通过其他工具读取 auth.dpapi 或 CLI 缓存。恢复接入使用本机管理窗口。',
+        '使用 status/search 后按精确条目 ID 调用工具。密码、TOTP、主密码和会话不会返回。首次 SSH 指纹必须通过客户端本次确认；工具永久批准不代替主机信任。拒绝、取消后不要自动重试；密钥变化不能自动覆盖。只可按用户授权连接或提交网页。不要通过其他工具读取凭据文件或 CLI 缓存。恢复接入使用本机管理窗口。',
     },
   );
   registerAgentTools(server, vault);

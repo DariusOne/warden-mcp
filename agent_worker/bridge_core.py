@@ -20,9 +20,10 @@ NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 
 class BridgeError(Exception):
-    def __init__(self, code: str, message: str):
+    def __init__(self, code: str, message: str, details=None):
         super().__init__(message)
         self.code, self.message = code, message
+        self.details = details
 
 
 def atomic_json(path: Path, data):
@@ -194,22 +195,18 @@ def mysql_query(broker, item_id, sql, max_rows=100):
             conn.close()
 
 
-def ssh_exec(broker, item_id, command, timeout=20):
+def ssh_exec(broker, item_id, command, timeout=20, *, approval=None):
     import paramiko
+    from ssh_trust import connect
     if not command or len(command) > 16000:
         raise BridgeError("command", "命令为空或过长。")
     target = connection_target(broker.get_item(item_id), "ssh")
-    client = paramiko.SSHClient()
-    for path in [Path.home() / ".ssh" / "known_hosts", broker.root / "state" / "known_hosts"]:
-        if path.exists():
-            client.load_host_keys(str(path))
-    client.set_missing_host_key_policy(paramiko.RejectPolicy())
+    client = None
     try:
-        client.connect(target["host"], port=target["port"], username=target["user"], password=target["password"],
-                       timeout=10, auth_timeout=10, banner_timeout=10, allow_agent=False, look_for_keys=False)
+        client = connect(broker.root, target, item_id, approval)
+        started = time.monotonic()
         _, stdout, stderr = client.exec_command(command, timeout=min(max(timeout, 1), 60))
         channel = stdout.channel
-        started = time.monotonic()
         out, err = bytearray(), bytearray()
         while True:
             if channel.recv_ready():
@@ -229,11 +226,10 @@ def ssh_exec(broker, item_id, command, timeout=20):
                                       "stderr": err.decode("utf-8", "replace")})
     except BridgeError:
         raise
-    except paramiko.SSHException as e:
-        if "known_hosts" in str(e):
-            raise BridgeError("ssh_host_key", "SSH 主机指纹尚未受信任；请先在本机使用 SSH 核验并登记 known_hosts。") from None
+    except paramiko.SSHException:
         raise BridgeError("ssh_failed", "SSH 握手或身份验证失败；原始错误已隐藏。") from None
     except Exception:
         raise BridgeError("ssh_failed", "SSH 连接失败，请检查条目地址、端口及账户。") from None
     finally:
-        client.close()
+        if client is not None:
+            client.close()

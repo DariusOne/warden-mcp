@@ -62,7 +62,7 @@ def main():
                     broker.item, broker.token = payload.get('item'), payload.get('otp')
                     args = payload.get('args') or {}
                     if operation == 'ssh_exec':
-                        value = core.ssh_exec(broker, **args)
+                        value = core.ssh_exec(broker, **args, approval=payload.get('ssh_approval'))
                     elif operation == 'mysql_query':
                         value = core.mysql_query(broker, **args)
                     elif operation in ('browser_open', 'browser_state', 'browser_fill_login', 'browser_fill_totp', 'browser_action'):
@@ -73,7 +73,10 @@ def main():
                 sys.stdout.flush()
                 value = None
             except core.BridgeError as error:
-                sys.stdout.write(json.dumps({'id': request_id, 'ok': False, 'code': error.code}) + '\n')
+                response = {'id': request_id, 'ok': False, 'code': error.code}
+                if error.code in ('ssh_host_unknown', 'ssh_host_changed') and isinstance(error.details, dict):
+                    response['host_key'] = error.details
+                sys.stdout.write(json.dumps(response) + '\n')
                 sys.stdout.flush()
             except Exception:
                 sys.stdout.write(json.dumps({'id': request_id, 'ok': False, 'code': 'worker_failed'}) + '\n')
