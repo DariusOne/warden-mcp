@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@icoretech/warden-mcp",
-  "version": "0.2.61",
+  "version": "0.2.62",
   "type": "module",
   "license": "MIT",
   "description": "Vaultwarden/Bitwarden MCP server backed by Bitwarden CLI (bw).",
@@ -44,7 +44,7 @@
     "lint": "biome check --write --assist-enabled=true . && tsc --noEmit"
   },
   "dependencies": {
-    "@bitwarden/cli": "2026.10.0",
+    "@bitwarden/cli": "2026.10.1",
     "@modelcontextprotocol/sdk": "^1.32.2",
     "express": "^5.3.0",
     "zod": "^4.6.7"
