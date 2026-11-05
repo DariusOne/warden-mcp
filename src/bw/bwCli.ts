@@ -94,6 +94,13 @@ export class BwCliError extends Error {
   }
 }
 
+export class BwCliStdinError extends Error {
+  constructor() {
+    super('Failed to write input to bw CLI');
+    this.name = 'BwCliStdinError';
+  }
+}
+
 function diagnoseBwCliFailure(stderr: string): BwCliDiagnosticCode | null {
   if (
     stderr.includes(
@@ -218,14 +225,6 @@ export async function runBw(
   child.stdout.on('data', (d: Buffer) => stdoutChunks.push(d));
   child.stderr.on('data', (d: Buffer) => stderrChunks.push(d));
 
-  // A CLI may reject/close stdin before consuming it. Preserve its actual exit
-  // status rather than allowing EPIPE to crash the credential-owning parent.
-  child.stdin.on('error', () => {});
-  if (opts.stdin !== undefined) {
-    child.stdin.write(opts.stdin);
-  }
-  child.stdin.end();
-
   const timeoutMs = opts.timeoutMs ?? 60_000;
 
   const killChildProcessTree = () => {
@@ -255,6 +254,10 @@ export async function runBw(
   return new Promise<BwRunResult>((resolve, reject) => {
     let settled = false;
     let terminationError: Error | undefined;
+    let stdinFailed = false;
+    child.stdin.on('error', () => {
+      stdinFailed = true;
+    });
     const settle = (fn: () => void) => {
       if (settled) return;
       settled = true;
@@ -342,6 +345,10 @@ export async function runBw(
           );
           return;
         }
+        if (stdinFailed) {
+          reject(new BwCliStdinError());
+          return;
+        }
         if (debug) {
           console.log(`[bw] ok: ms=${Date.now() - startedAt}`);
         }
@@ -350,5 +357,6 @@ export async function runBw(
     });
     signal?.addEventListener('abort', abort, { once: true });
     if (signal?.aborted) abort();
+    child.stdin.end(opts.stdin);
   });
 }

@@ -51,9 +51,17 @@ def main():
                 request_id = request['id']
                 operation = request['operation']
                 payload = request.get('payload') or {}
-                if operation in ('credentials', 'credential_status'):
+                if operation in ('credentials', 'credential_identity', 'credential_status'):
                     try:
-                        value = load_credentials(root, config) if operation == 'credentials' else credential_status(root, config)
+                        if operation == 'credential_status':
+                            value = credential_status(root, config)
+                        else:
+                            value = load_credentials(root, config)
+                            if operation == 'credential_identity':
+                                login = ({'method': 'apikey', 'clientId': value['client_id']}
+                                         if value.get('client_id') and value.get('client_secret')
+                                         else {'method': 'userpass', 'user': value['email']})
+                                value = {'server': value['server'], 'login': login}
                     except CredentialError:
                         raise core.BridgeError('credential_store', 'Credential provider unavailable') from None
                 elif operation == 'browser_close':

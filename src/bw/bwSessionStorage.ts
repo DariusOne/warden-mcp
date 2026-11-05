@@ -156,7 +156,12 @@ export class BwSessionStorage {
   }
 
   async clearSession(): Promise<void> {
+    if (!this.persistSession) return;
     await rm(this.sessionStatePath, { force: true }).catch(() => {});
+  }
+
+  async deleteSession(): Promise<void> {
+    await rm(this.sessionStatePath, { force: true });
   }
 
   async clearCliDataFiles(): Promise<void> {

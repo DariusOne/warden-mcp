@@ -27,8 +27,12 @@ test('stdin EOF closes MCP and awaits memory/browser revocation', {
       JSON.stringify({
         server: 'https://example.invalid',
         bw,
-        python: await realpath(process.env.WARDEN_TEST_PYTHON ?? '/usr/bin/python3'),
-        worker: fileURLToPath(new URL('../../agent_worker/worker.py', import.meta.url)),
+        python: await realpath(
+          process.env.WARDEN_TEST_PYTHON ?? '/usr/bin/python3',
+        ),
+        worker: fileURLToPath(
+          new URL('../../agent_worker/worker.py', import.meta.url),
+        ),
       }),
     );
     await chmod(join(root, 'config.json'), 0o600);
@@ -74,8 +78,12 @@ test('Linux startup probes exact CLI version only inside isolated private CLI st
       JSON.stringify({
         server: 'https://example.invalid',
         bw,
-        python: await realpath(process.env.WARDEN_TEST_PYTHON ?? '/usr/bin/python3'),
-        worker: fileURLToPath(new URL('../../agent_worker/worker.py', import.meta.url)),
+        python: await realpath(
+          process.env.WARDEN_TEST_PYTHON ?? '/usr/bin/python3',
+        ),
+        worker: fileURLToPath(
+          new URL('../../agent_worker/worker.py', import.meta.url),
+        ),
       }),
     );
     await chmod(join(root, 'config.json'), 0o600);

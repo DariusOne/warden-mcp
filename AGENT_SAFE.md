@@ -1,6 +1,6 @@
 # Agent-safe local stdio mode
 
-This fork keeps upstream 0.2.60 and adds a local credential-use interface.
+This fork tracks upstream 0.2.66 and adds a local credential-use interface.
 It does not require changes to Vaultwarden, its database, proxy or certificates.
 The full HTTPS URL, including a port and subpath, is passed to the Bitwarden CLI.
 HTTP mode keeps upstream's origin-only constraint.
@@ -85,6 +85,19 @@ upstream plaintext session JSON. Inactivity for ten minutes revokes the session
 and closes browser contexts; the next authorized operation unlocks on demand.
 Pause persists a disabled flag, blocks new operations, clears the session and
 closes browsers. A local GUI is the supported resume path.
+
+The private `AgentSession` adapter discovers the actual login identity before
+constructing the upstream session manager. Identity discovery returns only the
+server and login identity on the private pipe. Credentials are then supplied
+on demand through upstream's identity-bound provider with `persistSession: false`.
+Neither startup nor the MCP status tool decrypts enrollment. Revocation fences
+pending identity/credential reads and reports cleanup failures without raw errors.
+Existing Windows and Linux enrollment formats and profile paths are unchanged.
+
+The fork's private `onSecret` observer remains in `BwSessionOptions` so master
+passwords, API secrets and newly issued or validated sessions reach the output
+filter. It is not a public MCP parameter. The SDK accepts a structural session
+interface so the lazy adapter does not need a dummy account or inherited secrets.
 
 Known secrets are represented in the output filter by rolling-hash prefilters
 and SHA-256 confirmation, not stored plaintext copies of master/session values.

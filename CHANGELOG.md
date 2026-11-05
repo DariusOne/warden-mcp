@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.2.66](https://github.com/icoretech/warden-mcp/compare/v0.2.65...v0.2.66) (2026-11-04)
+
+
+### Bug Fixes
+
+* **package:** reconcile bundled CLI dependency declarations ([ac2f73c](https://github.com/icoretech/warden-mcp/commit/ac2f73c73688fe8a2eba63f2bffa6f24ef8ee8ee))
+* **release:** retain npm packaging for legacy release tags ([8b6538e](https://github.com/icoretech/warden-mcp/commit/8b6538e0c18e406debf3a6587ee5f76e4997341a))
+* **release:** wait for source CI before merging release PRs ([81fc2b9](https://github.com/icoretech/warden-mcp/commit/81fc2b93ff11829cdcd8d330fa0ceeaaf7fb64bc))
+* **test:** await signup forms before bootstrapping vaults ([5565e87](https://github.com/icoretech/warden-mcp/commit/5565e8787c480ab6d4ab5e2aee233a576edb628c))
+
+
+### Dependencies
+
+* bundle the vetted CLI with node-forge 1.4.3 ([359c261](https://github.com/icoretech/warden-mcp/commit/359c261ace61edccf25bef2600907668d72af6f3))
+
+## [0.2.65](https://github.com/icoretech/warden-mcp/compare/v0.2.64...v0.2.65) (2026-11-04)
+
+
+### Features
+
+* **bw:** add lazy credentials and explicit session revocation ([6ffd988](https://github.com/icoretech/warden-mcp/commit/6ffd98861d067d152820f7c760a5bdba997f0b48))
+
+
+### Bug Fixes
+
+* **bw:** isolate child sessions and handle stdin failures ([cbd51d6](https://github.com/icoretech/warden-mcp/commit/cbd51d6fdb653d423bb3b1f722fd48d76c05124c))
+
+## [0.2.64](https://github.com/icoretech/warden-mcp/compare/v0.2.63...v0.2.64) (2026-11-02)
+
+
+### Dependencies
+
+* lock file maintenance ([7e94225](https://github.com/icoretech/warden-mcp/commit/7e94225dcf9484551b89828c53c648644cee3ab6))
+
+## [0.2.63](https://github.com/icoretech/warden-mcp/compare/v0.2.62...v0.2.63) (2026-11-02)
+
+
+### Dependencies
+
+* update vaultwarden/server docker tag to v1.37.5 ([#241](https://github.com/icoretech/warden-mcp/issues/241)) ([9fff678](https://github.com/icoretech/warden-mcp/commit/9fff678eccb1dede4569a886ce95be3203298b4d))
+
 ## [0.2.62](https://github.com/icoretech/warden-mcp/compare/v0.2.61...v0.2.62) (2026-10-29)
 
 

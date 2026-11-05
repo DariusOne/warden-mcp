@@ -53,16 +53,15 @@ async function fixture(t: TestContext, idleMs?: number) {
   };
 }
 
-test('production sessions remain memory-only with a ten-minute idle default', async (t) => {
+test('production sessions initialize lazily with a ten-minute idle default', async (t) => {
   const f = await fixture(t);
   try {
     const settings = f.vault as unknown as {
       idleMs: number;
-      bw: { env: { persistSession: boolean; homeDir: string } };
+      bw: { manager?: unknown };
     };
     assert.equal(settings.idleMs, 600_000);
-    assert.equal(settings.bw.env.persistSession, false);
-    assert.equal(settings.bw.env.homeDir, join(f.root, 'state', 'cli'));
+    assert.equal(settings.bw.manager, undefined);
   } finally {
     await f.cleanup();
   }
@@ -99,6 +98,26 @@ test('pause stops an in-flight private operation before waiting for the vault lo
     release();
     await active;
     await paused;
+    await f.cleanup();
+  }
+});
+
+test('failed session cleanup reports a fixed error and keeps persisted access disabled', async (t) => {
+  const f = await fixture(t);
+  const revoke = t.mock.method(internals(f.vault).bw, 'revoke', async () => {
+    throw new SafeError('session_cleanup');
+  });
+  try {
+    const result = await f.vault.invoke('pause_access', {});
+    assert.equal(result.ok, false);
+    assert.equal(result.error, 'session_cleanup');
+    assert.equal(
+      JSON.parse(await readFile(join(f.root, 'access.json'), 'utf8')).enabled,
+      false,
+    );
+    assert.equal((await f.vault.invoke('sync', {})).error, 'disabled');
+  } finally {
+    revoke.mock.restore();
     await f.cleanup();
   }
 });

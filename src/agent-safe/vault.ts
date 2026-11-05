@@ -11,12 +11,12 @@ import {
   writeFile,
 } from 'node:fs/promises';
 import { join } from 'node:path';
-import { BwSessionManager } from '../bw/bwSession.js';
 import { Mutex } from '../bw/mutex.js';
 import { KeychainSdk } from '../sdk/keychainSdk.js';
 import type { AgentConfig } from './config.js';
 import { metadata, record, SecretFilter } from './filter.js';
 import { PrivateWorker, SafeError } from './privateWorker.js';
+import { AgentSession } from './session.js';
 import {
   type ConfirmHostKey,
   confirmationMessage,
@@ -70,6 +70,7 @@ const SAFE_CODES = new Set([
   'password_missing',
   'port',
   'readonly_sql',
+  'session_cleanup',
   'ref',
   'ssh_failed',
   'ssh_host_key',
@@ -87,7 +88,7 @@ const SAFE_CODES = new Set([
 export class AgentVault {
   readonly filter = new SecretFilter();
   readonly worker: PrivateWorker;
-  private readonly bw: BwSessionManager;
+  private readonly bw: AgentSession;
   private readonly sdk: KeychainSdk;
   private readonly lock = new Mutex();
   private readonly pages = new Map<string, string>();
@@ -105,40 +106,13 @@ export class AgentVault {
     private readonly idleMs = 600_000,
   ) {
     this.worker = new PrivateWorker(config.python, config.worker, root);
-    this.bw = new BwSessionManager({
-      host: config.server,
-      password: '',
-      login: { method: 'userpass', user: 'agent-safe' },
-      unlockIntervalSeconds: 600,
-      homeDir: join(root, 'state', 'cli'),
-      persistSession: false,
-      onSecret: (value) => this.filter.add(value),
-      credentialProvider: async () => {
-        await this.enabled();
-        const auth = record(await this.worker.call('credentials'));
-        if (
-          auth.server !== config.server ||
-          typeof auth.master !== 'string' ||
-          typeof auth.email !== 'string'
-        )
-          throw new SafeError('credential_store');
-        this.filter.add(auth.master, auth.client_secret);
-        return {
-          password: auth.master,
-          login:
-            typeof auth.client_id === 'string' &&
-            auth.client_id &&
-            typeof auth.client_secret === 'string' &&
-            auth.client_secret
-              ? {
-                  method: 'apikey' as const,
-                  clientId: auth.client_id,
-                  clientSecret: auth.client_secret,
-                }
-              : { method: 'userpass' as const, user: auth.email },
-        };
-      },
-    });
+    this.bw = new AgentSession(
+      root,
+      config.server,
+      this.worker,
+      this.filter,
+      () => this.enabled(),
+    );
     this.sdk = new KeychainSdk(this.bw);
   }
   async policy(): Promise<Record<string, unknown>> {
@@ -197,7 +171,13 @@ export class AgentVault {
     this.watchPolicy();
     if (this.timer) clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      void this.lock.runExclusive(() => this.revoke()).catch(() => {});
+      void this.lock
+        .runExclusive(() => this.revoke())
+        .catch(() =>
+          this.audit('session_revoke', 'session_cleanup', undefined).catch(
+            () => {},
+          ),
+        );
     }, this.idleMs);
     this.timer.unref();
   }
@@ -301,8 +281,10 @@ export class AgentVault {
             message:
               code === 'disabled'
                 ? '接入已暂停，请通过本机管理窗口恢复。'
-                : (SSH_MESSAGES[code] ??
-                  '本机操作未完成；原始错误已隐藏，请检查本机凭据、目标配置或连接。'),
+                : code === 'session_cleanup'
+                  ? '会话清理未完全成功，原始错误已隐藏；暂停状态保持不变。'
+                  : (SSH_MESSAGES[code] ??
+                    '本机操作未完成；原始错误已隐藏，请检查本机凭据、目标配置或连接。'),
           }),
         );
       } finally {

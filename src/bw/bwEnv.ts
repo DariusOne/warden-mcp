@@ -1,7 +1,14 @@
-export interface BwEnv {
+export interface BwSessionConfig {
   readonly host: string;
-  readonly password: string;
   readonly unlockIntervalSeconds: number;
+  readonly login:
+    | { readonly method: 'apikey'; readonly clientId: string }
+    | { readonly method: 'userpass'; readonly user: string };
+  readonly homeDir?: string;
+}
+
+export interface BwEnv extends BwSessionConfig {
+  readonly password: string;
   readonly login:
     | {
         readonly method: 'apikey';
@@ -9,12 +16,14 @@ export interface BwEnv {
         readonly clientSecret: string;
       }
     | { readonly method: 'userpass'; readonly user: string };
-  readonly homeDir?: string;
-  /** Private provider: called only when login/unlock needs credentials. */
-  readonly credentialProvider?: () => Promise<
-    Pick<BwEnv, 'password' | 'login'>
-  >;
+}
+
+export type BwCredentialProvider = () => BwEnv | Promise<BwEnv>;
+
+export interface BwSessionOptions {
+  readonly credentialProvider?: BwCredentialProvider;
   readonly persistSession?: boolean;
+  /** Private observer for the agent output filter; never logs or returns secrets. */
   readonly onSecret?: (value: string) => void;
 }
 

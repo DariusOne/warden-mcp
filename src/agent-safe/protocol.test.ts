@@ -120,6 +120,7 @@ test('safe MCP exposes exactly twelve compatible tools; direct secret calls reje
       'keychain_get_attachment',
       'keychain_send_get',
       'credentials',
+      'credential_identity',
       'resume_access',
     ]) {
       const r = await client.callTool({ name, arguments: {} });

@@ -221,8 +221,14 @@ export interface ListOrganizationsInput {
   limit?: number;
 }
 
+/** Session operations used by the SDK, including private lazy adapters. */
+export type KeychainSession = Pick<
+  BwSessionManager,
+  'withSession' | 'runForSession' | 'getTemplateItemForSession' | 'status'
+>;
+
 export class KeychainSdk {
-  constructor(private readonly bw: BwSessionManager) {}
+  constructor(private readonly bw: KeychainSession) {}
 
   private async createLoginForSession(
     session: string,
